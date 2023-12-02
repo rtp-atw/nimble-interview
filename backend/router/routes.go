@@ -30,6 +30,10 @@ func init() {
 func NewRouter() {
 	r := gin.Default()
 
+	r.Use(gin.Logger())
+
+	r.Use(gin.Recovery())
+
 	keywordsService := keywords.Register()
 	authService := authentication.Register()
 
@@ -45,13 +49,26 @@ func NewRouter() {
 
 		v1 := api.Group("/v1")
 		{
-			users := v1.Group("/users", authService.SignIn)
+			usersAuth := v1.Group("/users")
+			usersAuth.Use(authService.Validator())
 			{
-				users.POST("/signin")
+				usersAuth.GET("/profile")
 			}
-			keywords := v1.Group("/keywords")
-			{
 
+			users := v1.Group("/users")
+			{
+				users.POST("/signin", authService.SignIn)
+				users.POST("/signup", authService.SignUp)
+			}
+
+			keywords := v1.Group("/keywords")
+			keywords.Use(authService.Validator())
+			{
+				keywords.GET("", func(c *gin.Context) {
+					c.JSON(200, gin.H{
+						"message": "pong",
+					})
+				})
 				keywords.POST("/upload", keywordsService.Upload)
 			}
 
