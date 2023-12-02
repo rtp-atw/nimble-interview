@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rtp-atw/nimble-interview/pkg/authentication"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
@@ -30,6 +31,7 @@ func NewRouter() {
 	r := gin.Default()
 
 	keywordsService := keywords.Register()
+	authService := authentication.Register()
 
 	r.MaxMultipartMemory = 8 << 20 // 8 MiB
 
@@ -43,11 +45,16 @@ func NewRouter() {
 
 		v1 := api.Group("/v1")
 		{
+			users := v1.Group("/users", authService.SignIn)
+			{
+				users.POST("/signin")
+			}
 			keywords := v1.Group("/keywords")
 			{
 
 				keywords.POST("/upload", keywordsService.Upload)
 			}
+
 		}
 	}
 
