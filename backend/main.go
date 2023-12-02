@@ -1,9 +1,21 @@
 package main
 
-import "fmt"
+import (
+	"github.com/rtp-atw/nimble-interview/adapters/db"
+	"github.com/rtp-atw/nimble-interview/tools/logging"
+	"github.com/sirupsen/logrus"
+)
+
+var log *logrus.Logger
 
 func init() {
-	fmt.Println("Hello World")
+	log = logging.Initial()
+	log.Infoln("[project] initializing")
+
+	db.Initial()
 }
 
-func main() {}
+func main() {
+	log.Infoln("[project] initialized")
+
+}
