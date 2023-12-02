@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/rtp-atw/nimble-interview/adapters/db"
+	"github.com/rtp-atw/nimble-interview/router"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
 )
@@ -16,6 +17,9 @@ func init() {
 }
 
 func main() {
+
+	router.NewRouter()
+
 	log.Infoln("[project] initialized")
 
 }
