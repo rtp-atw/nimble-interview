@@ -1,6 +1,9 @@
 package tools
 
 import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
 )
@@ -17,4 +20,12 @@ func CheckError(err error) {
 		log.Panic(err)
 	}
 
+}
+
+func GinRecovery(ctx *gin.Context) {
+	if r := recover(); r != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": r,
+		})
+	}
 }
