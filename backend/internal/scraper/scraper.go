@@ -10,7 +10,7 @@ import (
 	"github.com/rtp-atw/nimble-interview/tools"
 )
 
-func (s *Service) Extract(uuid uuid.UUID, keyword string) {
+func (s *Service) Extract(uuid uuid.UUID, keyword string) (result ExtractData) {
 
 	browser := s.collector.MustConnect()
 	defer browser.MustClose()
@@ -54,7 +54,7 @@ func (s *Service) Extract(uuid uuid.UUID, keyword string) {
 
 	numADS, numLinks, searchResult, rawHTML := <-processAdsCH, <-processLinksCH, <-processResultCH, <-processExtractCH
 
-	result := ExtractData{
+	result = ExtractData{
 		UUID:         uuid,
 		Keyword:      keyword,
 		NumberOfAds:  numADS,
@@ -62,9 +62,7 @@ func (s *Service) Extract(uuid uuid.UUID, keyword string) {
 		Result:       searchResult,
 		HTML:         rawHTML,
 	}
-
-	s.log.Infoln(result)
-
+	return result
 }
 
 func (s *Service) channelProcessAds(p *rod.Page, ch chan int32, errCH chan error, wg *sync.WaitGroup) {
@@ -142,13 +140,12 @@ func (s *Service) channelProcessExtract(p *rod.Page, ch chan string, errCH chan 
 
 	s.log.Debugln("[ch] processing extract html")
 
-	_, err := p.HTML()
+	html, err := p.HTML()
 	if err != nil {
 		ch <- ""
 		panic(err)
 	}
 
-	// ch <- html
-	ch <- ""
+	ch <- html
 
 }

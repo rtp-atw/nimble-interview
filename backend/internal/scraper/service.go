@@ -8,7 +8,7 @@ import (
 )
 
 type ScraperInterface interface {
-	Extract(uuid uuid.UUID, keyword string)
+	Extract(uuid uuid.UUID, keyword string) ExtractData
 }
 
 type Service struct {
