@@ -2,14 +2,18 @@ package daos
 
 import (
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/rtp-atw/nimble-interview/pkg/authentication/jwt"
 	"gorm.io/gorm"
 )
 
 type CreateUserPayload struct {
-	UUID     uuid.UUID `json:"uuid" gorm:"columns:uuid"`
-	Email    string    `json:"email" gorm:"columns:email"`
-	Password string    `json:"password" gorm:"columns:password"`
+	UUID     uuid.UUID `json:"uuid"`
+	Email    string    `json:"email"`
+	Password string    `json:"password"`
+}
+
+type GetUserPayload struct {
+	Email string `json:"email"`
 }
 
 type User struct {
@@ -23,20 +27,9 @@ type User struct {
 
 // GORM Hook
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	u.HashPassword()
-	return
-}
-
-func (c *User) HashPassword() (string, error) {
-	hashed, err := bcrypt.GenerateFromPassword([]byte(c.Password), 16)
+	u.Password, err = jwt.HashPassword(u.Password)
 	if err != nil {
-		return "", err
+		panic(err.Error())
 	}
-
-	return string(hashed), nil
-}
-
-func (u *User) comparePassword(hashedPassword string, password string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-	return err == nil
+	return
 }

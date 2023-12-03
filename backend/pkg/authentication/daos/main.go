@@ -12,6 +12,7 @@ type AuthenticationRepository struct {
 }
 type AuthenticationRepositoryInterface interface {
 	CreateUser(payload CreateUserPayload) User
+	GetUser(payload GetUserPayload) (user User, err error)
 }
 
 func Register(db *sql.DB, ORM *gorm.DB) AuthenticationRepositoryInterface {
