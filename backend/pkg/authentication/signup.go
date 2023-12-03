@@ -33,8 +33,9 @@ func (s *Service) SignUp(c *gin.Context) {
 	daoUser := s.repository.CreateUser(payload)
 
 	user := models.User{
-		ID:   int32(daoUser.ID),
-		UUID: daoUser.UUID,
+		ID:    int32(daoUser.ID),
+		Email: daoUser.Email,
+		UUID:  daoUser.UUID,
 	}
 
 	user.GenerateToken()
