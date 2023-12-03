@@ -11,8 +11,8 @@ import (
 var log *logrus.Logger
 
 type Service struct {
-	db    *sql.DB
-	dbORM *gorm.DB
+	DB  *sql.DB
+	ORM *gorm.DB
 }
 
 func init() {
@@ -24,7 +24,7 @@ func Initial() Service {
 	newDatabase := NewDatabase()
 	newORM := NewGORM()
 	return Service{
-		db:    newDatabase,
-		dbORM: newORM,
+		DB:  newDatabase,
+		ORM: newORM,
 	}
 }
