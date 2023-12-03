@@ -11,6 +11,7 @@ import (
 type User struct {
 	ID    int32     `json:"id"`
 	UUID  uuid.UUID `json:"uuid"`
+	Email string    `json:"email"`
 	Token string    `json:"token"`
 }
 
@@ -41,4 +42,3 @@ func (u *User) GenerateToken() {
 
 	u.Token = signedToken
 }
-

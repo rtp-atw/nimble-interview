@@ -8,7 +8,7 @@ func (s *AuthenticationRepository) CreateUser(payload CreateUserPayload) User {
 		Password: payload.Password,
 	}
 
-	tx := s.repositoryORM.Table("user").Create(&newUser)
+	tx := s.repositoryORM.Table("users").Create(&newUser)
 	if tx.Error != nil {
 		panic(tx.Error.Error())
 	}
