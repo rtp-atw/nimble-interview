@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var signingString []byte
@@ -40,4 +41,18 @@ func ParseToken(t string) (jwt.MapClaims, error) {
 	}
 
 	return jwt.MapClaims{}, err
+}
+
+func HashPassword(password string) (string, error) {
+	hashed, err := bcrypt.GenerateFromPassword([]byte(password), 16)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashed), nil
+}
+
+func ComparePassword(hashedPassword string, password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	return err == nil
 }

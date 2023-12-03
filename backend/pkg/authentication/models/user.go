@@ -5,11 +5,14 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 type User struct {
-	ID    int32  `json:"id"`
-	Token string `json:"token"`
+	ID    int32     `json:"id"`
+	UUID  uuid.UUID `json:"uuid"`
+	Email string    `json:"email"`
+	Token string    `json:"token"`
 }
 
 type UserClaim struct {
