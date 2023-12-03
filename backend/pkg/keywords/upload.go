@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/rtp-atw/nimble-interview/internal/scraper"
 	"github.com/rtp-atw/nimble-interview/tools"
 )
 
@@ -31,6 +33,10 @@ func (s *Service) Upload(c *gin.Context) {
 	keyword := Keywords{}
 
 	keyword.dehydrate(rawRecords)
+
+	scraperService := scraper.New()
+
+	scraperService.Extract(uuid.New(), keyword.Data[0])
 
 	c.JSON(http.StatusOK, keyword.Data)
 }
