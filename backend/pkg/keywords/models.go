@@ -1,7 +1,6 @@
 package keywords
 
 import (
-	"fmt"
 	"strings"
 	"sync"
 )
@@ -27,17 +26,15 @@ func (k *Keywords) dehydrate(records [][]string) {
 			if d == "" {
 				continue
 			}
-			
+
 			filteredData = append(filteredData, d)
 		}
-		fmt.Println(filteredData)
 
 		ch <- filteredData
 	}
 
 	for _, r := range records {
 		wg.Add(1)
-		fmt.Println("input", r)
 		go decouplingFunc(r, processChan, &wg)
 	}
 

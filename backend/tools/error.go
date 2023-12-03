@@ -1,6 +1,7 @@
 package tools
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,4 +29,17 @@ func GinRecovery(ctx *gin.Context) {
 			"message": r,
 		})
 	}
+}
+
+func RoutineRecovery(ch chan error) {
+	if r := recover(); r != nil {
+		err, matched := r.(error)
+		if matched {
+			ch <- err
+			return
+		}
+
+		ch <- errors.New("unknow error")
+	}
+
 }
