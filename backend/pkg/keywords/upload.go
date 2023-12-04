@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/rtp-atw/nimble-interview/adapters/rabbitmq"
 	"github.com/rtp-atw/nimble-interview/pkg/authentication/jwt"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords/daos"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords/models"
@@ -31,7 +32,7 @@ func (s *Service) Upload(c *gin.Context) {
 
 	reader := csv.NewReader(fileTmp)
 	rawRecords, _ := reader.ReadAll()
-
+	s.log.Errorln(rawRecords)
 	keyword := models.ExtractedKeywords{}
 
 	keyword.Dehydrate(rawRecords)
@@ -53,6 +54,21 @@ func (s *Service) Upload(c *gin.Context) {
 		KeywordUUID: daoKeyword.UUID.String(),
 	})
 	tools.CheckError(err)
+
+	mqService := rabbitmq.Initial()
+	end := 5
+	for i := 0; i < len(keyword.Data); i++ {
+		if end > len(keyword.Data)-1 {
+			end = len(keyword.Data)
+		}
+		reqKeywords := keyword.Data[i:end]
+		mqService.SendQueue("REPORT:GENERATE", map[string]interface{}{
+			"uuid":     uuid.New(),
+			"keywords": reqKeywords,
+		})
+		i = end - 1
+		end += 5
+	}
 
 	// scraperService := scraper.New()
 	// scraperService.Extract(uuid.New(), keyword.Data[0])
