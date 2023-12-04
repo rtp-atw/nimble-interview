@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,14 +22,14 @@ func (m *Middleware) Validator() gin.HandlerFunc {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 
-		validToken, err := jwt.ParseToken(token)
+		userClaim, err := jwt.ParseToken(token)
 
 		if err != nil {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-		fmt.Println("[valid token]", validToken)
+
 		// GET USER THEN SAVE SOME DATA
-		c.Set("user_token", validToken)
+		c.Set("user_claim", userClaim)
 
 		c.Next()
 

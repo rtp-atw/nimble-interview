@@ -1,17 +1,20 @@
 package daos
 
-import "gorm.io/gorm/clause"
-
-func (s *KeywordRepository) InsertKeyword(payload CreateKeywordPayload) {
+func (s *KeywordRepository) InsertKeyword(payload CreateKeywordPayload) (keyword Keyword) {
 
 	newKeyword := Keyword{
 		UUID:    payload.UUID,
 		Keyword: payload.Keyword,
 	}
 
-	tx := s.repositoryORM.Table(tableName).Clauses(clause.OnConflict{DoNothing: true}).Create(&newKeyword)
+	tx := s.repositoryORM.
+		Table(tableName).
+		Where("keyword = ?", payload.Keyword).
+		FirstOrCreate(&newKeyword).Scan(&keyword)
+
 	if tx.Error != nil {
 		panic(tx.Error.Error())
 	}
 
+	return keyword
 }

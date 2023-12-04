@@ -8,6 +8,9 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/rtp-atw/nimble-interview/pkg/authentication/jwt"
+	"github.com/rtp-atw/nimble-interview/pkg/keywords/daos"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords/models"
 	"github.com/rtp-atw/nimble-interview/tools"
 )
@@ -35,8 +38,20 @@ func (s *Service) Upload(c *gin.Context) {
 
 	s.CreateKeyword(keyword.Data[0])
 
+	user := jwt.GetClaim(c)
+
+	keywordUUID := uuid.New()
+
+	daoKeyword := s.repository.InsertKeyword(daos.CreateKeywordPayload{
+		UUID:    keywordUUID,
+		Keyword: keyword.Data[0],
+	})
+
+	fmt.Println("user", user)
+	fmt.Println("daoKeyword", daoKeyword)
+
 	// scraperService := scraper.New()
 	// scraperService.Extract(uuid.New(), keyword.Data[0])
 
-	c.JSON(http.StatusOK, keyword.Data)
+	c.JSON(http.StatusOK, &gin.H{})
 }

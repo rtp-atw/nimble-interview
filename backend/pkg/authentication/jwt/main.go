@@ -3,13 +3,23 @@ package jwt
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 var signingString []byte
+
+type JWT struct {
+	jwt.MapClaims
+	ID    int32     `json:"id"`
+	UUID  uuid.UUID `json:"uuid"`
+	Email string    `json:"email"`
+}
 
 func init() {
 	secretKEY := os.Getenv("JWT_SECRET_KEY")
@@ -55,4 +65,21 @@ func HashPassword(password string) (string, error) {
 func ComparePassword(hashedPassword string, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	return err == nil
+}
+
+func GetClaim(c *gin.Context) JWT {
+	ctxClaim, ok := c.Value("user_claim").(jwt.MapClaims)
+
+	jwt := JWT{}
+
+	if !ok {
+		c.JSON(http.StatusUnauthorized, &gin.H{})
+		return jwt
+	}
+
+	jwt.ID = int32(ctxClaim["id"].(float64))
+	jwt.UUID, _ = uuid.Parse(ctxClaim["uuid"].(string))
+	jwt.Email = ctxClaim["email"].(string)
+
+	return jwt
 }

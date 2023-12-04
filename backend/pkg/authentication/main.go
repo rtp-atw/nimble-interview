@@ -5,6 +5,7 @@ import (
 	"github.com/rtp-atw/nimble-interview/adapters/db"
 	"github.com/rtp-atw/nimble-interview/pkg/authentication/daos"
 	"github.com/rtp-atw/nimble-interview/pkg/authentication/middlewares"
+	"github.com/rtp-atw/nimble-interview/pkg/authentication/models"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
 )
@@ -19,6 +20,7 @@ type Service struct {
 type ServiceInterface interface {
 	SignIn(c *gin.Context)
 	SignUp(c *gin.Context)
+	GetUser(id int32, uuid string) (models.User, error)
 	middlewares.MiddlewareInterface
 }
 
