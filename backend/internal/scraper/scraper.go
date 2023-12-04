@@ -2,10 +2,14 @@ package scraper
 
 import (
 	"fmt"
+	"math/rand"
 	"regexp"
 	"sync"
+	"time"
 
 	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/launcher"
+	"github.com/go-rod/rod/lib/proto"
 	"github.com/google/uuid"
 	"github.com/rtp-atw/nimble-interview/tools"
 )
@@ -13,10 +17,18 @@ import (
 func (s *Service) Extract(uuid uuid.UUID, keyword string) (result ExtractData) {
 	defer tools.Recovery()
 
-	browser := s.collector.MustConnect()
+	l := launcher.New().Headless(true)
+	browser := rod.New().ControlURL(l.MustLaunch()).MustConnect()
 	defer browser.MustClose()
 
-	page := browser.MustPage(fmt.Sprintf("https://www.google.com/search?q=%s", keyword))
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomUserAgent := userAgents[rand.Intn(len(userAgents))]
+
+	s.log.Infof("[extract] runing on user agent %s", randomUserAgent)
+	page := browser.MustPage(fmt.Sprintf("https://www.google.com/search?q=%s", keyword)).
+		MustSetUserAgent(&proto.NetworkSetUserAgentOverride{
+			UserAgent: randomUserAgent,
+		})
 
 	page.MustWaitLoad()
 
@@ -77,13 +89,6 @@ func (s *Service) channelProcessAds(p *rod.Page, ch chan int32, errCH chan error
 		ch <- int32(0)
 		panic(err)
 	}
-
-	// for _, l := range linkADS {
-	// 	el, _ := l.Element("a")
-	// 	link, _ := el.Attribute("href")
-	// 	fmt.Println(*link)
-
-	// }
 
 	ch <- int32(len(linkADS))
 }

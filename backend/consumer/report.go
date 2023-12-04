@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"math/rand"
 	"time"
 
 	"github.com/rtp-atw/nimble-interview/adapters/rabbitmq"
@@ -73,7 +74,9 @@ func main() {
 				d.Ack(true)
 				continue
 			}
-			time.Sleep(1 * time.Second)
+			sleepTime := randomTimeSleep()
+			log.Infof("Sleeping for %f minutes", sleepTime.Minutes())
+			time.Sleep(sleepTime)
 		}
 	}()
 
@@ -86,4 +89,13 @@ func failOnError(err error, msg string) {
 	if err != nil {
 		log.Panicf("%s: %s", msg, err)
 	}
+}
+
+func randomTimeSleep() time.Duration {
+	// Seed the random number generator
+	rand.Seed(time.Now().UnixNano())
+
+	// Generate a random number between 5 and 17
+	randomSeconds := rand.Intn(13) + 5
+	return time.Duration(randomSeconds) * time.Second
 }

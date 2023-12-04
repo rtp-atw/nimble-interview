@@ -34,7 +34,7 @@ func (s *Service) Upload(c *gin.Context) {
 
 	reader := csv.NewReader(fileTmp)
 	rawRecords, _ := reader.ReadAll()
-	s.log.Errorln(rawRecords)
+
 	keyword := models.ExtractedKeywords{}
 
 	keyword.Dehydrate(rawRecords)
@@ -54,6 +54,7 @@ func (s *Service) Upload(c *gin.Context) {
 			UUID:    keywordUUID,
 			Keyword: k,
 		})
+
 		tools.CheckError(err)
 
 		daoUserKeyword, err := s.repository.InsertUserKeyword(daos.CreateUserKeywordPayload{
@@ -61,9 +62,6 @@ func (s *Service) Upload(c *gin.Context) {
 			KeywordUUID: daoKeyword.UUID.String(),
 		})
 		tools.CheckError(err)
-
-		// keywordMap := map[string]string{}
-		// keywordMap[daoUserKeyword.KeywordUUID] = daoUserKeyword.Keyword
 
 		keywordUUIDs = append(keywordUUIDs, []string{daoUserKeyword.KeywordUUID, daoUserKeyword.Keyword})
 
@@ -78,6 +76,7 @@ func (s *Service) Upload(c *gin.Context) {
 			end = len(keywordUUIDs)
 		}
 		reqKeywords := keywordUUIDs[i:end]
+		fmt.Println(reqKeywords)
 		for _, req := range reqKeywords {
 			keyUUID := req[0]
 			key := req[1]
