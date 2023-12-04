@@ -1,4 +1,6 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
+
+import { BACKEND_HOST } from "@/utils/variables";
 
 export const useAuthMutation = () => {
   return {
@@ -21,6 +23,7 @@ const authMutation = async <T>(
     AxiosResponse<T, Record<string, any>>,
     Record<string, any>
   >({
+    baseURL: BACKEND_HOST,
     method: "POST",
     url,
     data: arg,
@@ -46,6 +49,7 @@ const authMutationWithJWT = async <T>(
     AxiosResponse<T, Record<string, any>>,
     Record<string, any>
   >({
+    baseURL: BACKEND_HOST,
     method: "POST",
     url,
     headers: {

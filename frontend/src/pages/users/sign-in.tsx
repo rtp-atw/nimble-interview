@@ -1,6 +1,8 @@
 import { getCookie } from "cookies-next";
 
-import { getLayout } from "@/components/Layout/Wrapper";
+import { SignIn } from "@modules/Users";
+
+import { getLayout } from "@components/Layout/Wrapper";
 
 import { COOKIE_KEY } from "@/hooks";
 
@@ -10,7 +12,7 @@ import type { NextPageWithLayout } from "@/src/pages/_app";
 type SignInPageProps = {};
 
 const SignInPage: NextPageWithLayout<SignInPageProps> = () => {
-  return <div />;
+  return <SignIn />;
 };
 
 SignInPage.getLayout = getLayout;

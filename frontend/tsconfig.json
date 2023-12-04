@@ -16,6 +16,7 @@
     "paths": {
       "@/*": ["./*"],
       "@modules/*": ["./src/modules/*"],
+      "@modules": ["./src/modules"],
       "@components/*": ["./src/components/*"]
     }
   },

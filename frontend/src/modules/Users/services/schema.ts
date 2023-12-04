@@ -1,6 +1,6 @@
 import { object, string, ref, type InferType, boolean } from "yup";
 
-import { emailValidator, passwordValidator } from "@/validators";
+import { emailValidator, passwordValidator } from "@/src/validators";
 
 export const regExpName = new RegExp(
   /^\p{L}+(?:[\s-]\p{L}+)+(\s\p{N}*\p{L}*)?$/,

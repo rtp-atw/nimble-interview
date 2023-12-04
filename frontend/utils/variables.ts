@@ -20,3 +20,4 @@ if (publicRuntimeConfig.processEnv.NEXT_PUBLIC_APP_STAGE === "production") {
 }
 
 export const COOKIE_HOST = _COOKIE_HOST;
+export const BACKEND_HOST = _BACKEND_HOST;

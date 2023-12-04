@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { Container } from "@components/Container";
 
 export const Header: FC = () => {
   const handleSignIn = () => {};
@@ -6,8 +7,8 @@ export const Header: FC = () => {
   const handleSignUp = () => {};
   return (
     <>
-      <header>
-        <div>Header</div>
+      <header className="bg-gray-25 border-b border-gray-25 ">
+        <Container className="min-h-[52px]">Header</Container>
       </header>
     </>
   );

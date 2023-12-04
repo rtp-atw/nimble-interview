@@ -2,7 +2,9 @@ package router
 
 import (
 	"os"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rtp-atw/nimble-interview/pkg/authentication"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords"
@@ -29,6 +31,14 @@ func init() {
 
 func NewRouter() {
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Length", "Content-Type", "Cache-Control", "Connection", "Transfer-Encoding", "Access-Control-Allow-Origin", "X-User-Token", "X-Auth-Key"},
+		AllowCredentials: false,
+		AllowAllOrigins:  true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	r.Use(gin.Logger())
 
