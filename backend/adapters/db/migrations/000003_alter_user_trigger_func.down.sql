@@ -1,2 +1,1 @@
-DROP TRIGGER IF EXISTS update_updated_at_column 
-ON users
+DROP TRIGGER IF EXISTS tg_users_updated_at ON users

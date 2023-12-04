@@ -17,6 +17,9 @@ type User struct {
 
 type UserClaim struct {
 	jwt.RegisteredClaims
+	ID    int32     `json:"id"`
+	UUID  uuid.UUID `json:"uuid"`
+	Email string    `json:"email"`
 }
 
 func (u *User) GenerateToken() {
@@ -27,11 +30,15 @@ func (u *User) GenerateToken() {
 
 	claims := UserClaim{
 		jwt.RegisteredClaims{
+			ID:        string(u.ID),
 			Issuer:    "nimble-backend",
 			ExpiresAt: jwt.NewNumericDate(time.Now().AddDate(0, 7, 0)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
 		},
+		u.ID,
+		u.UUID,
+		u.Email,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(secretKEY))

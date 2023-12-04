@@ -29,7 +29,7 @@ func (s *Service) SignIn(c *gin.Context) {
 		Email: req.Email,
 	}
 
-	daoUser, err := s.repository.GetUser(payload)
+	daoUser, err := s.repository.GetUserByEmail(payload)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, &gin.H{})
 		return

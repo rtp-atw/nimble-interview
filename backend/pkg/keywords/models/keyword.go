@@ -1,15 +1,23 @@
-package keywords
+package models
 
 import (
 	"strings"
 	"sync"
+
+	"github.com/google/uuid"
 )
 
-type Keywords struct {
+type Keyword struct {
+	ID      int32     `json:"id" gorm:"columns:id"`
+	UUID    uuid.UUID `json:"uuid" gorm:"columns:uuid"`
+	Keyword string    `json:"keyword" gorm:"columns:keyword"`
+}
+
+type ExtractedKeywords struct {
 	Data []string
 }
 
-func (k *Keywords) dehydrate(records [][]string) {
+func (k *ExtractedKeywords) Dehydrate(records [][]string) {
 	processChan := make(chan []string, len(records))
 
 	var wg sync.WaitGroup
