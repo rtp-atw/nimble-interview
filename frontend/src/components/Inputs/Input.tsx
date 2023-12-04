@@ -79,12 +79,12 @@ export const Input: FC<InputProps> = ({
             ["transition-all duration-400 ease-in"],
             disabled && "opacity-80",
             !error && [
-              "border-t2a-gray-border",
-              "focus:border-t2a-orange focus:ring-t2a-orange",
+              "border-gray-200",
+              "focus:border-blue-500 focus:ring-blue-500",
             ],
             error && [
-              "border-t2a-error mb-2",
-              "focus:border-t2a-error focus:ring-t2a-error",
+              "border-red-500 mb-2",
+              "focus:border-red-600 focus:ring-red-600",
             ],
             className
           )}
@@ -99,7 +99,7 @@ export const Input: FC<InputProps> = ({
               ? ["-translate-y-0 opacity-100"]
               : ["-translate-y-3 opacity-0"],
             "text-[10px] font-bold",
-            "text-t2a-error"
+            "text-red-500"
           )}
         >
           {error ?? <span className="opacity-0">;</span>}

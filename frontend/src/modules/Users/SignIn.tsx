@@ -70,9 +70,18 @@ export const SignIn: FC = () => {
   );
 
   return (
-    <div id="sign-in" className={clsx("my-4 ")}>
+    <div
+      id="sign-in"
+      className={clsx(
+        "flex flex-col flex-1 items-center justify-center ",
+        "pt-4 lg:pt-14 pb-4"
+      )}
+    >
       <>
-        <form onSubmit={formik.handleSubmit} className="mb-4">
+        <form
+          onSubmit={formik.handleSubmit}
+          className={clsx("mb-4", "w-full max-w-[320px]")}
+        >
           <div className={clsx("grid grid-flow-row grid-cols-1", "gap-4")}>
             <Input
               id="sign-in-email"
@@ -123,7 +132,7 @@ export const SignIn: FC = () => {
               {errMessage}
             </p>
           )}
-          <Button round type="submit" disabled={apiLoading}>
+          <Button round type="submit" disabled={apiLoading} className="mt-6">
             Sing In
           </Button>
         </form>
@@ -143,7 +152,7 @@ export const SignIn: FC = () => {
             locale={router.locale}
             className="font-semibold leading-6 text-t2a-orange"
           >
-            Sign Up
+            Go to sign-up
           </Link>
         </p>
       </>

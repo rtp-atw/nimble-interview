@@ -25,11 +25,11 @@ export const Button: FC<ButtonProps> = ({
         "px-4 py-3.5",
         ghost
           ? [
-              "bg-transparent hover:bg-t2a-orange",
-              "border border-t2a-orange",
-              "text-t2a-orange",
+              "bg-transparent hover:bg-blue-600",
+              "border border-blue-500",
+              "text-blue-500",
             ]
-          : ["bg-t2a-orange", "border-none", "text-white", ,],
+          : ["bg-blue-500 hover:bg-blue-600", "border-none", "text-white", ,],
         round ? "rounded-full" : "rounded-lg",
         "disabled:cursor-wait disabled:opacity-60",
         "hover:shadow-lg",
