@@ -11,6 +11,7 @@ import (
 )
 
 func (s *Service) Extract(uuid uuid.UUID, keyword string) (result ExtractData) {
+	defer tools.Recovery()
 
 	browser := s.collector.MustConnect()
 	defer browser.MustClose()
@@ -77,12 +78,12 @@ func (s *Service) channelProcessAds(p *rod.Page, ch chan int32, errCH chan error
 		panic(err)
 	}
 
-	for _, l := range linkADS {
-		el, _ := l.Element("a")
-		link, _ := el.Attribute("href")
-		fmt.Println(*link)
+	// for _, l := range linkADS {
+	// 	el, _ := l.Element("a")
+	// 	link, _ := el.Attribute("href")
+	// 	fmt.Println(*link)
 
-	}
+	// }
 
 	ch <- int32(len(linkADS))
 }

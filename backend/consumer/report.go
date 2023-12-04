@@ -5,7 +5,9 @@ import (
 	"time"
 
 	"github.com/rtp-atw/nimble-interview/adapters/rabbitmq"
+	"github.com/rtp-atw/nimble-interview/internal/scraper"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords/models"
+	"github.com/rtp-atw/nimble-interview/pkg/reports"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
 )
@@ -50,6 +52,9 @@ func main() {
 
 	var forever chan struct{}
 
+	scraperService := scraper.New()
+	reportService := reports.Register()
+
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
@@ -62,7 +67,12 @@ func main() {
 				continue
 			}
 
-			log.Infoln("eventData", eventData)
+			extractData := scraperService.Extract(eventData.UUID, eventData.Keyword[1])
+			err = reportService.UpdateReportResult(eventData.UUID.String(), extractData)
+			if err != nil {
+				d.Ack(true)
+				continue
+			}
 			time.Sleep(1 * time.Second)
 		}
 	}()

@@ -21,6 +21,7 @@ func NewDatabase() *sql.DB {
 	}
 
 	db, err := sql.Open(driver, dbConnection)
+	defer db.Close()
 
 	tools.CheckError(err)
 

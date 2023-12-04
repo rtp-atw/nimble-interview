@@ -13,8 +13,9 @@ type Keyword struct {
 	Keyword string    `json:"keyword" gorm:"columns:keyword"`
 }
 type RequestReportKeyword struct {
-	UUID    uuid.UUID `json:"uuid"`
-	Keyword string    `json:"keyword"`
+	UUID     uuid.UUID `json:"uuid"`
+	UserUUID string    `json:"user_uuid"`
+	Keyword  []string  `json:"keyword"`
 }
 
 type ExtractedKeywords struct {
