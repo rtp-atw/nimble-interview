@@ -1,0 +1,55 @@
+version: "3"
+
+services:
+  nimble-backend:
+    container_name: nimble-backend
+    restart: always
+    build: ./backend
+    ports:
+      - "8000:8000" # Expose the port your app runs on
+    command: ./nimble-backend
+    depends_on:
+      - rabbitmq
+      - postgres
+    env_file:
+      - .env
+
+  nimble-backend-consumer:
+    container_name: nimble-backend-consumer
+    restart: always
+    build: ./backend
+    command: ./nimble-backend-consumer
+    depends_on:
+      - rabbitmq
+      - postgres
+    env_file:
+      - .env
+
+  rabbitmq:
+    image: rabbitmq:3.11.26-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  postgres:
+    image: postgres:16.1-bullseye
+    restart: always
+    environment:
+      POSTGRES_DB: nimble
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_vol:/var/lib/postgresql/data
+
+volumes:
+  postgres_vol:
