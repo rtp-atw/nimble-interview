@@ -1,6 +1,16 @@
 version: "3"
 
 services:
+  nimble-frontend:
+    container_name: nimble-frontend
+    restart: always
+    build: ./frontend
+    ports:
+      - "3000:3000" # Expose the port your app runs on
+    command: yarn start
+    env_file:
+      - .env
+
   nimble-backend:
     container_name: nimble-backend
     restart: always
