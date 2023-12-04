@@ -12,6 +12,10 @@ type Keyword struct {
 	UUID    uuid.UUID `json:"uuid" gorm:"columns:uuid"`
 	Keyword string    `json:"keyword" gorm:"columns:keyword"`
 }
+type RequestReportKeyword struct {
+	UUID    uuid.UUID `json:"uuid"`
+	Keyword string    `json:"keyword"`
+}
 
 type ExtractedKeywords struct {
 	Data []string
