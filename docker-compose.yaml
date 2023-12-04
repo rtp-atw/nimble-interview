@@ -7,7 +7,7 @@ services:
     build: ./frontend
     ports:
       - "3000:3000" # Expose the port your app runs on
-    command: yarn start
+    command: node server.js
     env_file:
       - .env
 
