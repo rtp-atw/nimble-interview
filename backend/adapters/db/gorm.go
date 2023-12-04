@@ -37,7 +37,6 @@ func NewGORM() *gorm.DB {
 
 	if useExistedConnection {
 		conn, err := gorm.Open(postgres.Open(dbConnection), &config)
-
 		tools.CheckError(err)
 
 		dbORM = conn

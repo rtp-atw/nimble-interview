@@ -13,8 +13,9 @@ type Keyword struct {
 	Keyword string    `json:"keyword" gorm:"columns:keyword"`
 }
 type RequestReportKeyword struct {
-	UUID    uuid.UUID `json:"uuid"`
-	Keyword string    `json:"keyword"`
+	UUID     uuid.UUID `json:"uuid"`
+	UserUUID string    `json:"user_uuid"`
+	Keyword  []string  `json:"keyword"`
 }
 
 type ExtractedKeywords struct {
@@ -32,14 +33,16 @@ func (k *ExtractedKeywords) Dehydrate(records [][]string) {
 		filteredData := []string{}
 		for _, d := range data {
 			// Filter unexpected value
-			if strings.Contains(d, " ") {
+
+			formattedStr := strings.ReplaceAll(d, " ", "")
+			if strings.Contains(formattedStr, " ") {
 				continue
 			}
-			if d == "" {
+			if formattedStr == "" {
 				continue
 			}
 
-			filteredData = append(filteredData, d)
+			filteredData = append(filteredData, formattedStr)
 		}
 
 		ch <- filteredData

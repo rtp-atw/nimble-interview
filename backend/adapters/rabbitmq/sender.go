@@ -9,7 +9,6 @@ import (
 )
 
 func (s *MQService) SendQueue(queueName string, payload map[string]interface{}) {
-	defer s.Conn.Close()
 
 	ch, err := s.Conn.Channel()
 	failOnError(err, "Failed to open a channel")

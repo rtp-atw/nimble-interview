@@ -2,10 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"math/rand"
 	"time"
 
 	"github.com/rtp-atw/nimble-interview/adapters/rabbitmq"
+	"github.com/rtp-atw/nimble-interview/internal/scraper"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords/models"
+	"github.com/rtp-atw/nimble-interview/pkg/reports"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
 )
@@ -50,6 +53,9 @@ func main() {
 
 	var forever chan struct{}
 
+	scraperService := scraper.New()
+	reportService := reports.Register()
+
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
@@ -62,8 +68,15 @@ func main() {
 				continue
 			}
 
-			log.Infoln("eventData", eventData)
-			time.Sleep(1 * time.Second)
+			extractData := scraperService.Extract(eventData.UUID, eventData.Keyword[1])
+			err = reportService.UpdateReportResult(eventData.UUID.String(), extractData)
+			if err != nil {
+				d.Ack(true)
+				continue
+			}
+			sleepTime := randomTimeSleep()
+			log.Infof("Sleeping for %f seconds", sleepTime.Seconds())
+			time.Sleep(sleepTime)
 		}
 	}()
 
@@ -76,4 +89,13 @@ func failOnError(err error, msg string) {
 	if err != nil {
 		log.Panicf("%s: %s", msg, err)
 	}
+}
+
+// randomTimeSleep - random time between 5 and 25 second
+func randomTimeSleep() time.Duration {
+
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomSeconds := rand.Intn(21) + 5
+
+	return time.Duration(randomSeconds) * time.Second
 }

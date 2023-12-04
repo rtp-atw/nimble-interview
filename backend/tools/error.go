@@ -2,6 +2,7 @@ package tools
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,19 @@ func GinRecovery(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": r,
 		})
+	}
+}
+
+func Recovery() {
+	if r := recover(); r != nil {
+		err, matched := r.(error)
+		if matched {
+			fmt.Println(err.Error())
+			return
+		}
+		fmt.Println("[error] recovery")
+		return
+
 	}
 }
 
