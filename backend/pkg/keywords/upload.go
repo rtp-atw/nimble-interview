@@ -42,16 +42,21 @@ func (s *Service) Upload(c *gin.Context) {
 
 	keywordUUID := uuid.New()
 
-	daoKeyword := s.repository.InsertKeyword(daos.CreateKeywordPayload{
+	daoKeyword, err := s.repository.InsertKeyword(daos.CreateKeywordPayload{
 		UUID:    keywordUUID,
 		Keyword: keyword.Data[0],
 	})
+	tools.CheckError(err)
 
-	fmt.Println("user", user)
-	fmt.Println("daoKeyword", daoKeyword)
+	daoUserKeyword, err := s.repository.InsertUserKeyword(daos.CreateUserKeywordPayload{
+		UserUUID:    user.UUID.String(),
+		KeywordUUID: daoKeyword.UUID.String(),
+	})
+	tools.CheckError(err)
 
 	// scraperService := scraper.New()
 	// scraperService.Extract(uuid.New(), keyword.Data[0])
 
-	c.JSON(http.StatusOK, &gin.H{})
+	// c.JSON(http.StatusOK, &gin.H{})
+	c.JSON(http.StatusOK, daoUserKeyword)
 }

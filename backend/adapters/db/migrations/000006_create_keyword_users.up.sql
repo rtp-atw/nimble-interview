@@ -1,8 +1,8 @@
 -- table
 CREATE TABLE IF NOT EXISTS keyword_users (
     "id" SERIAL PRIMARY KEY,
-    "user_uuid" VARCHAR(255) NOT NULL UNIQUE,
-    "keyword_uuid" VARCHAR(255) NOT NULL UNIQUE,
+    "user_uuid" VARCHAR(255) NOT NULL,
+    "keyword_uuid" VARCHAR(255) NOT NULL,
 
     "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL,
     

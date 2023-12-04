@@ -11,7 +11,9 @@ type KeywordRepository struct {
 	repositoryORM *gorm.DB
 }
 type KeywordRepositoryInterface interface {
-	InsertKeyword(payload CreateKeywordPayload) Keyword
+	InsertKeyword(payload CreateKeywordPayload) (Keyword, error)
+	InsertUserKeyword(payload CreateUserKeywordPayload) (UserKeyword, error)
+
 	GetKeyword(id int32, uuid string) (Keyword, error)
 	GetKeywords() ([]Keyword, error)
 

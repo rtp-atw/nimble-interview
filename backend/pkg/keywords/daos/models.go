@@ -5,11 +5,17 @@ import (
 	"gorm.io/gorm"
 )
 
-const tableName = "keywords"
+const tableKeyword = "keywords"
+const tableUserKeyword = "keyword_users"
 
 type CreateKeywordPayload struct {
 	UUID    uuid.UUID `json:"uuid"`
 	Keyword string    `json:"keyword"`
+}
+
+type CreateUserKeywordPayload struct {
+	UserUUID    string `json:"user_uuid"`
+	KeywordUUID string `json:"keyword_uuid"`
 }
 
 type Keyword struct {
@@ -23,11 +29,11 @@ type Keyword struct {
 type UserKeyword struct {
 	gorm.Model
 
-	UUID        uuid.UUID `gorm:"columns:uuid, unique"`
-	UserUUID    string    `gorm:"columns:user_uuid"`
-	KeywordUUID string    `gorm:"columns:keyword_uuid"`
+	// UUID        uuid.UUID `gorm:"columns:uuid, unique"`
+	UserUUID    string `gorm:"columns:user_uuid"`
+	KeywordUUID string `gorm:"columns:keyword_uuid"`
 
-	Keyword string `gorm:"columns:keyword"`
+	Keyword string `gorm:"->"`
 
 	IsDeleted bool `gorm:"columns:is_deleted"`
 }
