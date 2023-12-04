@@ -32,5 +32,6 @@ type Report struct {
 	ProcessTime float32 `gorm:"columns:process_time"`
 	HTML        string  `gorm:"columns:html"`
 
-	IsDeleted bool `gorm:"columns:is_deleted"`
+	IsDeleted   bool `gorm:"columns:is_deleted"`
+	IsExtracted bool `gorm:"columns:is_extracted"`
 }

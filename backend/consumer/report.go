@@ -75,7 +75,7 @@ func main() {
 				continue
 			}
 			sleepTime := randomTimeSleep()
-			log.Infof("Sleeping for %f minutes", sleepTime.Minutes())
+			log.Infof("Sleeping for %f seconds", sleepTime.Seconds())
 			time.Sleep(sleepTime)
 		}
 	}()
@@ -91,11 +91,11 @@ func failOnError(err error, msg string) {
 	}
 }
 
+// randomTimeSleep - random time between 5 and 25 second
 func randomTimeSleep() time.Duration {
-	// Seed the random number generator
-	rand.Seed(time.Now().UnixNano())
 
-	// Generate a random number between 5 and 17
-	randomSeconds := rand.Intn(13) + 5
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomSeconds := rand.Intn(21) + 5
+
 	return time.Duration(randomSeconds) * time.Second
 }

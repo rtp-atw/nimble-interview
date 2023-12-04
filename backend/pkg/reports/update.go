@@ -12,6 +12,7 @@ func (s *Service) UpdateReportResult(reportUUID string, extractData scraper.Extr
 		"total_result": extractData.Result.TotalResult,
 		"process_time": extractData.Result.ProcessTime,
 		"html":         extractData.HTML,
+		"is_extracted": true,
 	}
 	_, err := s.repository.UpdateReport(reportUUID, 0, payload)
 	if err != nil {

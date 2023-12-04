@@ -14,6 +14,7 @@ type Report struct {
 	TotalResult int32     `json:"total_result"`
 	ProcessTime float32   `json:"precess_time"`
 	HTML        string    `json:"html"`
+	IsExtracted bool      `json:"is_extracted"`
 }
 
 type PayloadCreateReport struct {
