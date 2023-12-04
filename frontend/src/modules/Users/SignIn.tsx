@@ -21,12 +21,7 @@ export const SignIn: FC = () => {
 
   const { handleSignIn, loading: apiLoading } = useSignIn();
 
-  const [isUndefinedErr, setIsUndefinedErr] = useState<boolean>(false);
   const [errMessage, setErrMessage] = useState<string | undefined>();
-
-  const isWelcome = (router.query.welcome ?? "false") === "true";
-
-  const handleCloseErr = useCallback(() => setIsUndefinedErr(false), []);
 
   const handleSubmit = useCallback(
     async (
@@ -51,7 +46,6 @@ export const SignIn: FC = () => {
           setErrMessage(err.response.data.message);
           return;
         }
-        setIsUndefinedErr(true);
       }
     },
     [handleSignIn]
@@ -76,7 +70,7 @@ export const SignIn: FC = () => {
   );
 
   return (
-    <div id="sign-in">
+    <div id="sign-in" className={clsx("my-4 ")}>
       <>
         <form onSubmit={formik.handleSubmit} className="mb-4">
           <div className={clsx("grid grid-flow-row grid-cols-1", "gap-4")}>
@@ -143,13 +137,13 @@ export const SignIn: FC = () => {
         >
           <Link
             href={{
-              pathname: apiLoading ? "#" : "/account/signup",
+              pathname: apiLoading ? "#" : "/users/signup",
               query: router.query,
             }}
             locale={router.locale}
             className="font-semibold leading-6 text-t2a-orange"
           >
-            Sign In
+            Sign Up
           </Link>
         </p>
       </>
