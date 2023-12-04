@@ -8,8 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
-	"github.com/rtp-atw/nimble-interview/internal/scraper"
+	"github.com/rtp-atw/nimble-interview/pkg/keywords/models"
 	"github.com/rtp-atw/nimble-interview/tools"
 )
 
@@ -30,13 +29,14 @@ func (s *Service) Upload(c *gin.Context) {
 	reader := csv.NewReader(fileTmp)
 	rawRecords, _ := reader.ReadAll()
 
-	keyword := Keywords{}
+	keyword := models.ExtractedKeywords{}
 
-	keyword.dehydrate(rawRecords)
+	keyword.Dehydrate(rawRecords)
 
-	scraperService := scraper.New()
+	s.CreateKeyword(keyword.Data[0])
 
-	scraperService.Extract(uuid.New(), keyword.Data[0])
+	// scraperService := scraper.New()
+	// scraperService.Extract(uuid.New(), keyword.Data[0])
 
 	c.JSON(http.StatusOK, keyword.Data)
 }
