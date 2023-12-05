@@ -9,7 +9,7 @@ export const getLayout = (children: ReactElement) => {
   return (
     <>
       <Header />
-      <Container className="min-h-[calc(100vh-52px-300px)]">
+      <Container className="min-h-[calc(100vh-58px-300px)]">
         <main>{children}</main>
       </Container>
       <Footer />

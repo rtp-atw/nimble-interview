@@ -5,7 +5,7 @@ import { Container } from "@components/Container";
 export const Footer: FC = () => {
   return (
     <footer className="bg-footer">
-      <Container className="min-h-[300px]">Footer</Container>
+      <Container className="min-h-[300px]"></Container>
     </footer>
   );
 };

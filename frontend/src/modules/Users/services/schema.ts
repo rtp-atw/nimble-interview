@@ -13,29 +13,12 @@ export const signInSchema = object({
 });
 
 export const signUpSchema = object({
-  name: string(),
   email: emailValidator,
   password: passwordValidator.required("require.password"),
   confirm_password: passwordValidator
     .oneOf([ref("password")], "password_not_match")
     .required("require.confirm_password"),
-  subscribe_newsletter: boolean(),
-  // .required("require.newsletter"),
-});
-
-export const resetSchema = object({
-  email: emailValidator,
-});
-
-export const setPasswordSchema = object({
-  reset_token: string().required("require.reset_token"),
-  new_password: passwordValidator.required("require.password"),
-  confirm_password: passwordValidator
-    .oneOf([ref("new_password")], "password_not_match")
-    .required("require.confirm_password"),
 });
 
 export type SignInFormValue = InferType<typeof signInSchema>;
 export type SignUpFormValue = InferType<typeof signUpSchema>;
-export type ResetFormValue = InferType<typeof resetSchema>;
-export type SetPasswordFormValue = InferType<typeof setPasswordSchema>;
