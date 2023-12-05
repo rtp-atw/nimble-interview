@@ -38,7 +38,7 @@ export const useSignUp = () => {
         nextPath = router.query.next as string;
       }
       router.push({
-        pathname: "/upload",
+        pathname: "/users/upload",
         query: {
           next: nextPath,
         },

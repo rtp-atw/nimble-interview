@@ -84,6 +84,7 @@ func NewRouter() {
 			report.Use(authService.Validator())
 			{
 				report.GET("", reportService.GetReports)
+				report.GET("/:id", reportService.GetReport)
 			}
 
 		}

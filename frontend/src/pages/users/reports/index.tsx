@@ -1,19 +1,19 @@
-import { Report } from "@modules/Users";
+import { Reports } from "@modules/Users";
 
 import { getLayout } from "@components/Layout/Wrapper";
 
 import { type GetServerSideProps } from "next";
 import type { NextPageWithLayout } from "@/src/pages/_app";
 
-type ReportPageProps = {};
+type ReportsPageProps = {};
 
-const ReportPage: NextPageWithLayout<ReportPageProps> = () => {
-  return <Report />;
+const ReportsPage: NextPageWithLayout<ReportsPageProps> = () => {
+  return <Reports />;
 };
 
-ReportPage.getLayout = getLayout;
+ReportsPage.getLayout = getLayout;
 
-export const getServerSideProps: GetServerSideProps<ReportPageProps> = async ({
+export const getServerSideProps: GetServerSideProps<ReportsPageProps> = async ({
   locale,
   req,
   res,
@@ -24,4 +24,4 @@ export const getServerSideProps: GetServerSideProps<ReportPageProps> = async ({
   };
 };
 
-export default ReportPage;
+export default ReportsPage;

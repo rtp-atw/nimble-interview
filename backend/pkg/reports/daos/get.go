@@ -1,12 +1,14 @@
 package daos
 
-func (s *ReportRepository) GetReport(id int32, uuid string) (report Report, err error) {
+func (s *ReportRepository) GetReport(id int32, uuid string, userUUID string) (report Report, err error) {
 
-	tx := s.repositoryORM.Table(tableReport).
+	tx := s.repositoryORM.Table(tableReport).Debug().
 		Where(`
-			(id = ? OR uuid like '?')
-			AND is_deleted = FALSE
-		`, id, uuid).
+			(reports.id = ? OR reports.uuid like ?)
+			AND reports.user_uuid = ?
+			AND reports.is_deleted = FALSE
+		`, id, uuid, userUUID).
+		Joins("LEFT JOIN keywords ON keywords.uuid = reports.keyword_uuid").
 		Scan(&report)
 
 	if tx.Error != nil {
@@ -18,7 +20,7 @@ func (s *ReportRepository) GetReport(id int32, uuid string) (report Report, err 
 
 func (s *ReportRepository) GetReports(userUUID string) (reports []Report, err error) {
 
-	tx := s.repositoryORM.Table(tableReport).Debug().
+	tx := s.repositoryORM.Table(tableReport).
 		Select("reports.*, keywords.keyword").
 		Where("reports.user_uuid = ? AND reports.is_deleted = FALSE", userUUID).
 		Joins("LEFT JOIN keywords ON keywords.uuid = reports.keyword_uuid").

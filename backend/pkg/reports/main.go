@@ -19,6 +19,7 @@ type Service struct {
 type ServiceInterface interface {
 	// QUERY
 	GetReports(ctx *gin.Context)
+	GetReport(ctx *gin.Context)
 	// CMD
 	CreateReport(userUUID string, reportUUID uuid.UUID, keywordUUID string, keyword string) (models.Report, error)
 	UpdateReportResult(reportUUID string, extractData scraper.ExtractData) error

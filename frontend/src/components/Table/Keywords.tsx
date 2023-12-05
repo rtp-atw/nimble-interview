@@ -85,7 +85,7 @@ const columns: ColumnsType<Report> = [
     render: (_, record) => (
       <div>
         <Link
-          href={`/users/keyword/${record.id}`}
+          href={`/users/reports/${record.id}`}
           className="text-blue-500 hover:text-blue-600 cursor-pointer"
         >
           View
