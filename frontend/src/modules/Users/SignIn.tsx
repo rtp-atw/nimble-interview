@@ -112,6 +112,8 @@ export const SignIn: FC = () => {
                 ? (formik.errors.email as string)
                 : undefined
             }
+            round={false}
+            className="rounded-lg"
           />
           <Input
             id="sign-in-password"
@@ -132,6 +134,8 @@ export const SignIn: FC = () => {
                 ? (formik.errors.password as string)
                 : undefined
             }
+            round={false}
+            className="rounded-lg"
           />
         </div>
 

@@ -21,7 +21,7 @@ export const useUploadKeywords = () => {
     AxiosError,
     Key,
     UploadKeywordRequest
-  >("/api/v1/keywords", fetcher<UploadResponse>, {
+  >("/api/v1/keywords/upload", fetcher<UploadResponse>, {
     onSuccess: (data, key, config) => {},
   });
 

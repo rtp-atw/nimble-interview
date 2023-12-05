@@ -3,7 +3,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { debounce } from "lodash";
 
-import { useProtectedAuth } from "@/hooks";
+import { useRequireAuth } from "@/hooks";
 import { useGetReport } from "@/hooks/Keyword";
 
 import { Report as ReportType } from "@/hooks/Keyword/types";
@@ -13,7 +13,7 @@ type ReportProps = {
   id: string;
 };
 export const Report: FC<ReportProps> = ({ id }) => {
-  useProtectedAuth();
+  useRequireAuth();
 
   const { data, mutate, loading } = useGetReport(id);
 
@@ -30,7 +30,7 @@ export const Report: FC<ReportProps> = ({ id }) => {
 
   return (
     <>
-      <div className=" mt-4">
+      <div className="mt-4">
         <Link
           href={"/users/reports"}
           className="text-blue-500 hover:text-blue-600 cursor-pointer "
@@ -43,7 +43,7 @@ export const Report: FC<ReportProps> = ({ id }) => {
         className={clsx(
           "flex flex-col flex-1 items-center justify-center ",
           "pt-2 lg:pt-10 pb-4",
-          "w-full "
+          "w-full"
         )}
       >
         <h2 className={clsx("mb-6", "font-semibold text-lg")}>
@@ -65,7 +65,7 @@ export const Report: FC<ReportProps> = ({ id }) => {
             </div>
             <div
               className={clsx(
-                "grid grid-flow-row ",
+                "grid grid-flow-row w-full",
                 "grid-cols-2 md:grid-cols-4",
                 "gap-4"
               )}

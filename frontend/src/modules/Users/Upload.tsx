@@ -8,7 +8,7 @@ import {
 } from "react";
 import clsx from "clsx";
 
-import { useProfile, useProtectedAuth } from "@/hooks";
+import { useProfile, useRequireAuth } from "@/hooks";
 import { useUploadKeywords } from "@/hooks/Keyword";
 
 import { useFormik } from "formik";
@@ -21,7 +21,7 @@ import { KeywordTable } from "@/src/components/Table";
 import { Report } from "@/hooks/Keyword/types";
 
 export const Upload: FC = () => {
-  useProtectedAuth();
+  useRequireAuth();
 
   const { userJWT } = useProfile();
 

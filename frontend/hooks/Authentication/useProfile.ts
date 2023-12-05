@@ -1,6 +1,6 @@
 import { Cookie } from "@/utils/cookie";
 import { Router, useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { COOKIE_KEY } from ".";
 
 export type Profile = {
@@ -22,6 +22,7 @@ const defaultProfile: Profile = {
 export const useProfile = () => {
   const [profile, setProfile] = useState<Profile>();
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const router = useRouter();
 
@@ -30,24 +31,45 @@ export const useProfile = () => {
     return cookieJWT;
   }, [router]);
 
-  useEffect(() => {
-    console.log("userJWT", userJWT);
-    setProfile(undefined);
+  const handleLogout = useCallback(() => {
+    router
+      .push("/")
+      .then(() => Cookie.remove(COOKIE_KEY))
+      .catch(() => Cookie.remove(COOKIE_KEY));
+  }, [router]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    setProfile(undefined);
     setLoading(false);
   }, [setProfile, setLoading, userJWT]);
 
-  return { profile, loading, userJWT };
+  return { profile, loading, mounted, userJWT, handleLogout };
 };
 
 export const useProtectedAuth = () => {
-  const { profile, loading } = useProfile();
+  const { loading, userJWT } = useProfile();
   const router = useRouter();
 
   useEffect(() => {
     if (loading) return;
-    if (profile) {
+    if (userJWT) {
       router.push("/");
     }
-  }, [profile, loading, router]);
+  }, [loading, router, userJWT]);
+};
+
+export const useRequireAuth = () => {
+  const { loading, userJWT } = useProfile();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!userJWT) {
+      router.push("/");
+    }
+  }, [loading, router, userJWT]);
 };

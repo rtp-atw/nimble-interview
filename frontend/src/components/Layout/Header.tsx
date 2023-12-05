@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useProfile } from "@/hooks";
 
 export const Header: FC = () => {
-  const { profile } = useProfile();
+  const { mounted, userJWT, handleLogout } = useProfile();
+
+  const isAuthenticated = mounted && !!userJWT;
   return (
     <>
       <header className="bg-gray-25 border-b shadow-8 ">
@@ -23,16 +25,18 @@ export const Header: FC = () => {
             >
               Home
             </Link>
-            <Link
-              href="/upload"
-              className={clsx(
-                "cursor-pointer",
-                "font-semibold hover:text-blue-500"
-              )}
-            >
-              Upload
-            </Link>
-            {!profile && (
+            {isAuthenticated && (
+              <Link
+                href="/users/upload"
+                className={clsx(
+                  "cursor-pointer",
+                  "font-semibold hover:text-blue-500"
+                )}
+              >
+                Upload
+              </Link>
+            )}
+            {!isAuthenticated && (
               <Link
                 href="/users/sign-in"
                 className={clsx(
@@ -43,16 +47,16 @@ export const Header: FC = () => {
                 Sign In
               </Link>
             )}
-            {profile && (
-              <Link
-                href="/api/logout"
+            {isAuthenticated && (
+              <span
+                onClick={handleLogout}
                 className={clsx(
                   "cursor-pointer",
                   "font-semibold hover:text-blue-500"
                 )}
               >
                 Logout
-              </Link>
+              </span>
             )}
           </div>
         </Container>

@@ -113,6 +113,8 @@ export const SignUp: FC = () => {
                 ? (formik.errors.email as string)
                 : undefined
             }
+            round={false}
+            className="rounded-lg"
           />
           <Input
             id="sign-up-password"
@@ -133,6 +135,8 @@ export const SignUp: FC = () => {
                 ? (formik.errors.password as string)
                 : undefined
             }
+            round={false}
+            className="rounded-lg"
           />
           <Input
             id="sign-up-confirm-password"
@@ -153,6 +157,8 @@ export const SignUp: FC = () => {
                 ? (formik.errors.confirm_password as string)
                 : undefined
             }
+            round={false}
+            className="rounded-lg"
           />
         </div>
         {errMessage && (
