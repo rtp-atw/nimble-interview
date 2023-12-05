@@ -168,15 +168,17 @@ export const KeywordTable: FC<KeywordTableProps> = ({
   return (
     <>
       <div className="mb-4 ">
-        <Button
-          block={false}
-          small
-          onClick={handleDebouceRefetch}
-          className="ml-auto"
-          disabled={loading}
-        >
-          Refresh
-        </Button>
+        {refetch && (
+          <Button
+            block={false}
+            small
+            onClick={handleDebouceRefetch}
+            className="ml-auto"
+            disabled={loading}
+          >
+            Refresh
+          </Button>
+        )}
         <Input
           block={false}
           placeholder="Search.."

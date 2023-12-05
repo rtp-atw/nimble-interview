@@ -181,7 +181,7 @@ export const SignUp: FC = () => {
       >
         <Link
           href={{
-            pathname: apiLoading ? "#" : "/users/signin",
+            pathname: apiLoading ? "#" : "/users/sign-in",
             query: router.query,
           }}
           locale={router.locale}

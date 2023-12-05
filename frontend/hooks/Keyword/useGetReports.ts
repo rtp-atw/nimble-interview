@@ -21,7 +21,7 @@ export const useGetReports = () => {
     Key,
     Record<string, any>
   >("/api/v1/reports", fetcher, {
-    refreshInterval: 10 * 1000, // 10s
+    refreshInterval: 20 * 1000, // 10s
     revalidateIfStale: true,
     revalidateOnReconnect: true,
   });

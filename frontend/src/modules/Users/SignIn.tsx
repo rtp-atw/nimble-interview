@@ -162,11 +162,11 @@ export const SignIn: FC = () => {
       >
         <Link
           href={{
-            pathname: apiLoading ? "#" : "/users/signup",
+            pathname: apiLoading ? "#" : "/users/sign-up",
             query: router.query,
           }}
           locale={router.locale}
-          className="font-semibold leading-6 text-t2a-orange"
+          className={clsx("text-blue-500 hover:opacity-90")}
         >
           Go to sign-up
         </Link>

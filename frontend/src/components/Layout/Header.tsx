@@ -26,15 +26,26 @@ export const Header: FC = () => {
               Home
             </Link>
             {isAuthenticated && (
-              <Link
-                href="/users/upload"
-                className={clsx(
-                  "cursor-pointer",
-                  "font-semibold hover:text-blue-500"
-                )}
-              >
-                Upload
-              </Link>
+              <>
+                <Link
+                  href="/users/reports"
+                  className={clsx(
+                    "cursor-pointer",
+                    "font-semibold hover:text-blue-500"
+                  )}
+                >
+                  Reports
+                </Link>
+                <Link
+                  href="/users/upload"
+                  className={clsx(
+                    "cursor-pointer",
+                    "font-semibold hover:text-blue-500"
+                  )}
+                >
+                  Upload
+                </Link>
+              </>
             )}
             {!isAuthenticated && (
               <Link

@@ -6,7 +6,7 @@ services:
     restart: always
     build: ./frontend
     ports:
-      - "3000:3000" # Expose the port your app runs on
+      - "3000:3000"
     command: node server.js
     env_file:
       - .env
@@ -16,7 +16,7 @@ services:
     restart: always
     build: ./backend
     ports:
-      - "8000:8000" # Expose the port your app runs on
+      - "8000:8000"
     command: ./nimble-backend
     depends_on:
       - rabbitmq
