@@ -20,7 +20,6 @@ export const Upload: FC = () => {
   const handleUpload = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     if (!e.target.files[0]) return;
-    console.log(e.target.files);
 
     setSelectedFile(e.target.files[0]);
   }, []);
