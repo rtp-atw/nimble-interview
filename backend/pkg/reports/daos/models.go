@@ -21,6 +21,7 @@ type CreateReportPayload struct {
 type Report struct {
 	gorm.Model
 
+	ID          int       `gorm:"columns:id, unique"`
 	UUID        uuid.UUID `gorm:"columns:uuid, unique"`
 	UserUUID    string    `gorm:"columns:user_uuid"`
 	KeywordUUID string    `gorm:"columns:keyword_uuid"`

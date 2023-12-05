@@ -2,10 +2,13 @@ package router
 
 import (
 	"os"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rtp-atw/nimble-interview/pkg/authentication"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords"
+	"github.com/rtp-atw/nimble-interview/pkg/reports"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
 )
@@ -30,12 +33,21 @@ func init() {
 func NewRouter() {
 	r := gin.Default()
 
+	r.Use(cors.New(cors.Config{
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Length", "Content-Type", "Cache-Control", "Connection", "Transfer-Encoding", "Access-Control-Allow-Origin", "X-User-Token", "X-Auth-Key"},
+		AllowCredentials: false,
+		AllowAllOrigins:  true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	r.Use(gin.Logger())
 
 	r.Use(gin.Recovery())
 
 	keywordsService := keywords.Register()
 	authService := authentication.Register()
+	reportService := reports.Register()
 
 	r.MaxMultipartMemory = 8 << 20 // 8 MiB
 
@@ -59,17 +71,20 @@ func NewRouter() {
 			{
 				users.POST("/signin", authService.SignIn)
 				users.POST("/signup", authService.SignUp)
+
 			}
 
 			keywords := v1.Group("/keywords")
 			keywords.Use(authService.Validator())
 			{
-				keywords.GET("", func(c *gin.Context) {
-					c.JSON(200, gin.H{
-						"message": "pong",
-					})
-				})
 				keywords.POST("/upload", keywordsService.Upload)
+			}
+
+			report := v1.Group("/reports")
+			report.Use(authService.Validator())
+			{
+				report.GET("", reportService.GetReports)
+				report.GET("/:id", reportService.GetReport)
 			}
 
 		}
