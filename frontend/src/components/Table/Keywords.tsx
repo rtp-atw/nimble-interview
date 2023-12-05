@@ -75,6 +75,8 @@ const columns: ColumnsType<Report> = [
     key: "html",
     dataIndex: "html",
     responsive: ["xxl"],
+    width: 120,
+    ellipsis: true,
   },
   {
     title: "Action",
