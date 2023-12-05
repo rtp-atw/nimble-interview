@@ -1,6 +1,7 @@
 package reports
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/rtp-atw/nimble-interview/adapters/db"
 	"github.com/rtp-atw/nimble-interview/internal/scraper"
@@ -16,7 +17,9 @@ type Service struct {
 }
 
 type ServiceInterface interface {
-	// Service
+	// QUERY
+	GetReports(ctx *gin.Context)
+	// CMD
 	CreateReport(userUUID string, reportUUID uuid.UUID, keywordUUID string, keyword string) (models.Report, error)
 	UpdateReportResult(reportUUID string, extractData scraper.ExtractData) error
 }

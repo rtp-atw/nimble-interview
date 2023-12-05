@@ -20,8 +20,8 @@ export const useGetReports = () => {
     AxiosError,
     Key,
     Record<string, any>
-  >("/api/v1/keywords", fetcher, {
-    refreshInterval: 0,
+  >("/api/v1/reports", fetcher, {
+    refreshInterval: 10 * 1000, // 10s
     revalidateIfStale: true,
     revalidateOnReconnect: true,
   });
@@ -29,8 +29,7 @@ export const useGetReports = () => {
   return {
     data,
     error,
-    isLoading,
-    isValidating,
+    loading: isValidating || isLoading,
     mutate,
   };
 };

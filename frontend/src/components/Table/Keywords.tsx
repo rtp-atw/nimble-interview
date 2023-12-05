@@ -1,9 +1,11 @@
-import { FC } from "react";
+import { FC, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { Table } from "antd/lib";
+import { debounce } from "lodash";
 
 import type { Report } from "@/hooks/Keyword/types";
 import type { ColumnsType } from "antd/es/table";
+import { Button } from "../Button";
 
 const columns: ColumnsType<Report> = [
   {
@@ -93,15 +95,45 @@ const columns: ColumnsType<Report> = [
 
 export type KeywordTableProps = {
   dataSource: Report[];
+  refetch?: () => void;
+  loading?: boolean;
 };
-export const KeywordTable: FC<KeywordTableProps> = ({ dataSource }) => {
+export const KeywordTable: FC<KeywordTableProps> = ({
+  dataSource,
+  refetch,
+  loading,
+}) => {
+  const handleRefetch = useCallback(() => {
+    if (!refetch) return;
+    refetch();
+  }, [refetch]);
+
+  const handleDebouceRefetch = useMemo(
+    () => debounce(handleRefetch, 500, { leading: false }),
+    [handleRefetch]
+  );
+
   return (
-    <Table
-      columns={columns}
-      dataSource={dataSource}
-      pagination={{ pageSize: 15 }}
-      scroll={{ x: 900 }}
-    />
+    <>
+      <div className="mb-4 ">
+        <Button
+          block={false}
+          small
+          onClick={handleDebouceRefetch}
+          className="ml-auto"
+          disabled={loading}
+        >
+          Reload
+        </Button>
+      </div>
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        pagination={{ pageSize: 15 }}
+        scroll={{ x: 900 }}
+        loading={loading}
+      />
+    </>
   );
 };
 

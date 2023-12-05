@@ -6,16 +6,17 @@ import { useGetReports } from "@/hooks/Keyword";
 
 import { KeywordTable } from "@/src/components/Table";
 import { Report as ReportType } from "@/hooks/Keyword/types";
+import { Button } from "@/src/components/Button";
 
 export const Report: FC = () => {
   useProtectedAuth();
 
-  const { data, mutate } = useGetReports();
+  const { data, mutate, loading } = useGetReports();
 
   const [reports, setReports] = useState<ReportType[]>([]);
 
   useEffect(() => {
-    setReports((prev) => [...(data ?? []), ...prev]);
+    setReports(data ?? []);
   }, [data]);
 
   return (
@@ -28,8 +29,9 @@ export const Report: FC = () => {
       )}
     >
       <h2 className={clsx("mb-6", "font-semibold text-lg")}>Your Reports</h2>
+
       <div>
-        <KeywordTable dataSource={reports} />
+        <KeywordTable dataSource={reports} refetch={mutate} loading={loading} />
       </div>
     </div>
   );
