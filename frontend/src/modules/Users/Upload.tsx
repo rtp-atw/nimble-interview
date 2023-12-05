@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  type FC,
-  type ChangeEvent,
-  useState,
-  useEffect,
-} from "react";
+import { useCallback, type FC, type ChangeEvent, useState } from "react";
 import clsx from "clsx";
 
 import { useProfile, useProtectedAuth } from "@/hooks";
@@ -43,10 +37,6 @@ export const Upload: FC = () => {
       jwt: userJWT,
     });
   };
-
-  useEffect(() => {
-    console.log(";selectedFile", selectedFile);
-  }, [selectedFile]);
 
   return (
     <div
