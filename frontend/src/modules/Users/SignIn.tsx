@@ -141,7 +141,6 @@ export const SignIn: FC = () => {
           </p>
         )}
         <Button
-          round
           type="submit"
           disabled={apiLoading || isError || !formik.dirty}
           className="mt-6"

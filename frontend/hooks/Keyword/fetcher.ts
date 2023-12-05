@@ -18,6 +18,8 @@ const authMutationWithJWT = async <T>(
   { arg }: Record<string, any>,
   headers: Record<string, any> = {}
 ): Promise<T> => {
+  console.log("arg", arg);
+
   const { jwt = "", ...body } = arg;
   return await axios<
     T,
@@ -29,6 +31,7 @@ const authMutationWithJWT = async <T>(
     url,
     headers: {
       ...headers,
+      "Content-Type": "multipart/form-data",
       Authorization: `${arg.jwt}`,
     },
     data: body,

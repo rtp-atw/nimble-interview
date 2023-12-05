@@ -37,7 +37,7 @@ export const useProfile = () => {
     setLoading(false);
   }, [setProfile, setLoading, userJWT]);
 
-  return { profile, loading };
+  return { profile, loading, userJWT };
 };
 
 export const useProtectedAuth = () => {

@@ -7,12 +7,16 @@ type ButtonAttributes = ButtonHTMLAttributes<HTMLButtonElement>;
 type ButtonProps = {
   ghost?: boolean;
   round?: boolean;
+  small?: boolean;
+  block?: boolean;
 } & DetailedHTMLProps<ButtonAttributes, HTMLButtonElement>;
 
 export const Button: FC<ButtonProps> = ({
   id,
-  ghost,
-  round,
+  ghost = false,
+  round = false,
+  small = false,
+  block = true,
   className,
   children,
   ...rest
@@ -21,8 +25,9 @@ export const Button: FC<ButtonProps> = ({
     <button
       className={clsx(
         "flex items-center justify-center",
-        "w-full",
-        "px-4 py-3.5",
+        block ? "w-full" : "w-auto",
+        small && ["px-4 py-2", "text-xs"],
+        !small && ["px-4 py-3.5"],
         ghost
           ? [
               "bg-transparent hover:bg-blue-600",

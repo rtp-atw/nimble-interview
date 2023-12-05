@@ -30,7 +30,7 @@ export const useSignIn = () => {
       const nextWeek = new Date();
       nextWeek.setDate(nextWeek.getDate() + 7);
       Cookie.set(COOKIE_KEY, data.token, { expires: nextWeek });
-      
+
       let nextPath = "/";
       if (router.query.next) {
         nextPath = router.query.next as string;
