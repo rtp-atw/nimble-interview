@@ -19,6 +19,7 @@ func (s *Service) CreateReport(userUUID string, reportUUID uuid.UUID, keywordUUI
 	}
 
 	return models.Report{
+		ID:          report.ID,
 		UUID:        report.UUID,
 		UserUUID:    report.UserUUID,
 		KeywordUUID: report.KeywordUUID,

@@ -1,4 +1,5 @@
 export type Report = {
+  id: number;
   uuid: string;
   user_uuid: string;
   keyword_uuid: string;

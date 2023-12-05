@@ -4,6 +4,7 @@ import {
   type ChangeEvent,
   useState,
   useMemo,
+  useEffect,
 } from "react";
 import clsx from "clsx";
 
@@ -16,6 +17,8 @@ import { Input } from "@components/Inputs";
 import { Button } from "@/src/components/Button";
 
 import { uploadSchema } from "@modules/Users/services/schema";
+import { KeywordTable } from "@/src/components/Table";
+import { Report } from "@/hooks/Keyword/types";
 
 export const Upload: FC = () => {
   useProtectedAuth();
@@ -23,9 +26,13 @@ export const Upload: FC = () => {
   const { userJWT } = useProfile();
 
   const [inputKey, setInputKey] = useState(Date.now());
+  const [reports, setReports] = useState<Report[]>([]);
 
-  const { handleUpload: hookHandleUpload, loading: apiLoading } =
-    useUploadKeywords();
+  const {
+    handleUpload: hookHandleUpload,
+    loading: apiLoading,
+    data,
+  } = useUploadKeywords();
 
   const handleSubmit = (values: { keywords: File | null }) => {
     if (!values.keywords) return;
@@ -65,12 +72,17 @@ export const Upload: FC = () => {
     return Object.keys(formik.errors).length !== 0;
   }, [formik.errors]);
 
+  useEffect(() => {
+    setReports((prev) => [...(data ?? []), ...prev]);
+  }, [data]);
+
   return (
     <div
       id="sign-up"
       className={clsx(
         "flex flex-col flex-1 items-center justify-center ",
-        "pt-4 lg:pt-14 pb-4"
+        "pt-4 lg:pt-14 pb-4",
+        "w-full "
       )}
     >
       <h2 className={clsx("mb-6", "font-semibold text-lg")}>
@@ -126,7 +138,9 @@ export const Upload: FC = () => {
         </form>
       </div>
 
-      <div>Table</div>
+      <div>
+        <KeywordTable dataSource={reports} />
+      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import (
 )
 
 type Report struct {
+	ID          int       `json:"id"`
 	UUID        uuid.UUID `json:"uuid"`
 	UserUUID    string    `json:"user_uuid"`
 	KeywordUUID string    `json:"keyword_uuid"`

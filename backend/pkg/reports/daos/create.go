@@ -21,6 +21,7 @@ func (s *ReportRepository) InsertReport(payload CreateReportPayload) (report Rep
 		// JOIN CUSTOM FIELDS
 		Select("reports.*, keywords.keyword").
 		Joins("LEFT JOIN keywords ON keywords.uuid = reports.keyword_uuid").
+		Order("id desc").
 		Scan(&report)
 
 	if tx.Error != nil {
