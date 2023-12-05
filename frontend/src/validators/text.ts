@@ -1,20 +1,13 @@
 import { string } from "yup";
 
 export const emailValidator = string()
-  .required("require.email")
-  .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i, "email_format");
-//   .when("type", {
-//     is: (type: string) => type === "email",
-//     then: (schema) =>
-//       schema
-//         .required("require.email")
-//         .matches(
-//           /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-//           "require.email_format"
-//         ),
-//   });
+  .required("Please fill your email")
+  .matches(
+    /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+    "Email must contain @ and not allow for +"
+  );
 
 export const passwordValidator = string()
-  .min(8, "password_min_eight")
-  .matches(/[a-zA-Z]/, "password_char_num_required")
-  .matches(/\d/, "password_char_num_required");
+  .min(8, "Please must be at least 8 characters")
+  .matches(/[a-zA-Z]/, "Please must have 1 characters")
+  .matches(/\d/, "Please must have 1 number");

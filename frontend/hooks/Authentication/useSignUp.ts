@@ -32,12 +32,13 @@ export const useSignUp = () => {
       const nextWeek = new Date();
       nextWeek.setDate(nextWeek.getDate() + 7);
       Cookie.set(COOKIE_KEY, data.token, { expires: nextWeek });
-      // SWITCH TO WELCOME
+
       let nextPath = "/";
       if (router.query.next) {
         nextPath = router.query.next as string;
       }
       router.push({
+        pathname: "/upload",
         query: {
           next: nextPath,
         },

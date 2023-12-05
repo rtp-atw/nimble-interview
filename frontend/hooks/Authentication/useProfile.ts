@@ -1,6 +1,7 @@
-import { LocalStorage } from "@/utils/localStorage";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Cookie } from "@/utils/cookie";
+import { Router, useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
+import { COOKIE_KEY } from ".";
 
 export type Profile = {
   id: number;
@@ -22,10 +23,19 @@ export const useProfile = () => {
   const [profile, setProfile] = useState<Profile>();
   const [loading, setLoading] = useState(true);
 
+  const router = useRouter();
+
+  const userJWT = useMemo((): string | undefined => {
+    const cookieJWT = Cookie.get(COOKIE_KEY);
+    return cookieJWT;
+  }, [router]);
+
   useEffect(() => {
+    console.log("userJWT", userJWT);
     setProfile(undefined);
+
     setLoading(false);
-  }, [setProfile, setLoading]);
+  }, [setProfile, setLoading, userJWT]);
 
   return { profile, loading };
 };

@@ -1,4 +1,4 @@
-export const COOKIE_KEY = "]Hv8vbo";
+export const COOKIE_KEY = "bmItand0";
 
 export interface SignUpResponse {
   id: number;

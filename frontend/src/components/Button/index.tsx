@@ -31,7 +31,7 @@ export const Button: FC<ButtonProps> = ({
             ]
           : ["bg-blue-500 hover:bg-blue-600", "border-none", "text-white", ,],
         round ? "rounded-full" : "rounded-lg",
-        "disabled:cursor-wait disabled:opacity-60",
+        "disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-blue-500",
         "hover:shadow-lg",
         "transition-all duration-200 ease-in",
         className
