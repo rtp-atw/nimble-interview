@@ -3,6 +3,7 @@
 ## How to run
 
 - Using `docker-compose up --build`
+- Migrate table by cmd `migrate -database $MIGRATE_POSTGRESQL_URL -path backend/adapters/db/migrations up`
   > **Note:** Don't forgot to set environment
 
 ## Environments
@@ -13,6 +14,7 @@ Using docker services
 
     APP_STAGE="staging"
     JWT_SECRET_KEY="c594Q03tCQd6zUIuNRf7LpgKbuJq9cuuXyPWpJwHiL1XxAEAFbJKMrwyLEGj4Mma" # Example
+    MIGRATE_POSTGRESQL_URL="postgres://postgres:postgres@localhost:5432/nimble?sslmode=disable"
     POSTGRESQL_URL="postgresql://postgres:postgres@postgres/nimble?sslmode=disable"
     POSTGRESQL_GORM_URL="host=postgres user=postgres password=postgres dbname=nimble port=5432 sslmode=disable TimeZone=Asia/Bangkok"
     MQ_CONNECTION="amqp://guest:guest@rabbitmq/"
