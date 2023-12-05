@@ -1,11 +1,14 @@
-import { FC, useCallback, useMemo } from "react";
+import { ChangeEvent, FC, useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import { Table } from "antd/lib";
 import { debounce } from "lodash";
 
 import type { Report } from "@/hooks/Keyword/types";
 import type { ColumnsType } from "antd/es/table";
+import type { Key } from "antd/lib/table/interface";
+
 import { Button } from "../Button";
+import { Input } from "../Inputs";
 
 const columns: ColumnsType<Report> = [
   {
@@ -20,6 +23,29 @@ const columns: ColumnsType<Report> = [
     title: "Keyword",
     dataIndex: "keyword",
     key: "keyword",
+    filterMode: "tree",
+    filterSearch: true,
+    filters: [
+      {
+        text: "Joe",
+        value: "Joe",
+      },
+      {
+        text: "Category 1",
+        value: "Category 1",
+      },
+      {
+        text: "Category 2",
+        value: "Category 2",
+      },
+    ],
+    onFilter: (value: boolean | Key, record: Report) => {
+      if (typeof value === "boolean") return true;
+      return record.keyword.startsWith(value.toString());
+    },
+    sorter: {
+      compare: (a, b) => a.id - b.id,
+    },
   },
   {
     title: "Number of Ads",
@@ -105,6 +131,8 @@ export const KeywordTable: FC<KeywordTableProps> = ({
   refetch,
   loading,
 }) => {
+  const [searchText, setSearchText] = useState<string>();
+
   const handleRefetch = useCallback(() => {
     if (!refetch) return;
     refetch();
@@ -114,6 +142,28 @@ export const KeywordTable: FC<KeywordTableProps> = ({
     () => debounce(handleRefetch, 500, { leading: false }),
     [handleRefetch]
   );
+
+  const handleSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  }, []);
+
+  const handleDebouceSearch = useMemo(
+    () => debounce(handleSearch, 0, { leading: false }),
+    [handleSearch]
+  );
+
+  const filteredDataSource = useMemo(() => {
+    if (!searchText) return dataSource;
+    if (searchText === "") return dataSource;
+
+    return [...dataSource].reduce((p, c) => {
+      if (!c.keyword.includes(searchText)) {
+        return p;
+      }
+      p = p.concat([c]);
+      return p;
+    }, [] as Report[]);
+  }, [dataSource, searchText]);
 
   return (
     <>
@@ -125,14 +175,21 @@ export const KeywordTable: FC<KeywordTableProps> = ({
           className="ml-auto"
           disabled={loading}
         >
-          Reload
+          Refresh
         </Button>
+        <Input
+          block={false}
+          placeholder="Search.."
+          round={false}
+          className="rounded-lg min-w-[240px]"
+          onChange={handleDebouceSearch}
+        />
       </div>
       <Table
         columns={columns}
-        dataSource={dataSource}
+        dataSource={filteredDataSource}
         pagination={{ pageSize: 15 }}
-        scroll={{ x: 900 }}
+        // scroll={{ x: 1000 }}
         loading={loading}
       />
     </>

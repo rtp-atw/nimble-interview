@@ -1,11 +1,13 @@
-import { type FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import clsx from "clsx";
+import { debounce } from "lodash";
 
 import { useProtectedAuth } from "@/hooks";
 import { useGetReport } from "@/hooks/Keyword";
 
 import { Report as ReportType } from "@/hooks/Keyword/types";
+import { Button } from "@/src/components/Button";
 
 type ReportProps = {
   id: string;
@@ -16,6 +18,11 @@ export const Report: FC<ReportProps> = ({ id }) => {
   const { data, mutate, loading } = useGetReport(id);
 
   const [report, setReport] = useState<ReportType>();
+
+  const handleDebouceRefetch = useMemo(
+    () => debounce(() => mutate(), 500, { leading: false }),
+    [mutate]
+  );
 
   useEffect(() => {
     setReport(data);
@@ -44,55 +51,74 @@ export const Report: FC<ReportProps> = ({ id }) => {
         </h2>
 
         {report && !loading && (
-          <div
-            className={clsx(
-              "grid grid-flow-row ",
-              "grid-cols-2 md:grid-cols-4",
-              "gap-4"
-            )}
-          >
-            <div className={clsx("col-span-1")}>
-              <p className={clsx("block", "text-lg font-semibold")}>ID:</p>
-              <div>{report.id}</div>
+          <>
+            <div className="mb-2 ml-auto">
+              <Button
+                block={false}
+                small
+                onClick={handleDebouceRefetch}
+                className="ml-auto"
+                disabled={loading}
+              >
+                Refresh
+              </Button>
             </div>
-            <div className={clsx("col-span-1")}>
-              <p className={clsx("block", "text-lg font-semibold")}>Status:</p>
-              <div>{report.is_extracted ? "Success" : "Processing"}</div>
-            </div>
-            <div className={clsx("col-span-1")}>
-              <p className={clsx("block", "text-lg font-semibold")}>Keyword:</p>
-              <div>{report.keyword}</div>
-            </div>
+            <div
+              className={clsx(
+                "grid grid-flow-row ",
+                "grid-cols-2 md:grid-cols-4",
+                "gap-4"
+              )}
+            >
+              <div className={clsx("col-span-1")}>
+                <p className={clsx("block", "text-lg font-semibold")}>ID:</p>
+                <div>{report.id}</div>
+              </div>
+              <div className={clsx("col-span-1")}>
+                <p className={clsx("block", "text-lg font-semibold")}>
+                  Status:
+                </p>
+                <div>{report.is_extracted ? "Success" : "Processing"}</div>
+              </div>
+              <div className={clsx("col-span-1")}>
+                <p className={clsx("block", "text-lg font-semibold")}>
+                  Keyword:
+                </p>
+                <div>{report.keyword}</div>
+              </div>
 
-            <div className={clsx("col-span-1")}>
-              <p className={clsx("block", "text-lg font-semibold")}>Ads:</p>
-              <div>{report.ads}</div>
-            </div>
-            <div className={clsx("col-span-1")}>
-              <p className={clsx("block", "text-lg font-semibold")}>Links:</p>
-              <div>{report.links}</div>
-            </div>
-            <div className={clsx("col-span-1")}>
-              <p className={clsx("block", "text-lg font-semibold")}>
-                Total Result:
-              </p>
-              <div>{report.total_result}</div>
-            </div>
-            <div className={clsx("col-span-1")}>
-              <p className={clsx("block", "text-lg font-semibold")}>
-                Process Time:
-              </p>
-              <div>{report.precess_time}</div>
-            </div>
-            <div className={clsx("col-span-2 md:col-span-4")}>
-              <p className={clsx("block", "text-lg font-semibold")}>HTML:</p>
-              <div className={clsx("relative overflow-auto", "max-h-[480px]")}>
-                <pre>
-                  <code>{report.html}</code>
-                </pre>
+              <div className={clsx("col-span-1")}>
+                <p className={clsx("block", "text-lg font-semibold")}>Ads:</p>
+                <div>{report.ads}</div>
+              </div>
+              <div className={clsx("col-span-1")}>
+                <p className={clsx("block", "text-lg font-semibold")}>Links:</p>
+                <div>{report.links}</div>
+              </div>
+              <div className={clsx("col-span-1")}>
+                <p className={clsx("block", "text-lg font-semibold")}>
+                  Total Result:
+                </p>
+                <div>{report.total_result}</div>
+              </div>
+              <div className={clsx("col-span-1")}>
+                <p className={clsx("block", "text-lg font-semibold")}>
+                  Process Time:
+                </p>
+                <div>{report.precess_time}</div>
+              </div>
+              <div className={clsx("col-span-2 md:col-span-4")}>
+                <p className={clsx("block", "text-lg font-semibold")}>HTML:</p>
+                <div
+                  className={clsx("relative overflow-auto", "max-h-[480px]")}
+                >
+                  <pre>
+                    <code>{report.html}</code>
+                  </pre>
+                </div>
               </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </>
