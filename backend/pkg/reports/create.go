@@ -3,29 +3,31 @@ package reports
 import (
 	"github.com/google/uuid"
 	"github.com/rtp-atw/nimble-interview/pkg/reports/daos"
+	"github.com/rtp-atw/nimble-interview/pkg/reports/models"
 )
 
-func (s *Service) CreateReport(userUUID string, reportUUID uuid.UUID, keywordUUID string, keyword string) error {
-
-	// rUUID, _ := uuid.Parse(reportUUID)
-
-	// scraperService := scraper.New()
-	// extractData := scraperService.Extract(reportUUID, keyword)
+func (s *Service) CreateReport(userUUID string, reportUUID uuid.UUID, keywordUUID string, keyword string) (models.Report, error) {
 
 	payload := daos.CreateReportPayload{
 		UUID:        reportUUID,
 		UserUUID:    userUUID,
 		KeywordUUID: keywordUUID,
-		// Ads:         extractData.NumberOfAds,
-		// Links:       extractData.NumberOfLink,
-		// TotalResult: extractData.Result.TotalResult,
-		// ProcessTime: extractData.Result.ProcessTime,
-		// HTML:        extractData.HTML,
 	}
-	_, err := s.repository.InsertReport(payload)
+	report, err := s.repository.InsertReport(payload)
 	if err != nil {
-		return err
+		return models.Report{}, err
 	}
 
-	return nil
+	return models.Report{
+		UUID:        report.UUID,
+		UserUUID:    report.UserUUID,
+		KeywordUUID: report.KeywordUUID,
+		Keyword:     report.Keyword,
+		Ads:         report.Ads,
+		Links:       report.Links,
+		TotalResult: report.TotalResult,
+		ProcessTime: report.ProcessTime,
+		HTML:        report.HTML,
+		IsExtracted: report.IsExtracted,
+	}, nil
 }

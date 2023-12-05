@@ -69,6 +69,7 @@ func NewRouter() {
 			{
 				users.POST("/signin", authService.SignIn)
 				users.POST("/signup", authService.SignUp)
+
 			}
 
 			keywords := v1.Group("/keywords")

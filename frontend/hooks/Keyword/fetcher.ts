@@ -18,7 +18,17 @@ const authMutationWithJWT = async <T>(
   { arg }: Record<string, any>,
   headers: Record<string, any> = {}
 ): Promise<T> => {
-  const { jwt = "", ...body } = arg;
+  const { jwt = "", file, ...body } = arg;
+  const payload = { ...body };
+  console.log("payload", payload);
+
+  if (file) {
+    if (file instanceof File) {
+      headers["Content-Type"] = "multipart/form-data";
+      payload.file = file;
+    }
+  }
+
   return await axios<
     T,
     AxiosResponse<T, Record<string, any>>,
@@ -29,10 +39,9 @@ const authMutationWithJWT = async <T>(
     url,
     headers: {
       ...headers,
-      "Content-Type": "multipart/form-data",
       Authorization: `${arg.jwt}`,
     },
-    data: body,
+    data: payload,
   })
     .then((response) => response.data as T)
     .catch((err) => {

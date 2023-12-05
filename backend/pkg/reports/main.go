@@ -5,6 +5,7 @@ import (
 	"github.com/rtp-atw/nimble-interview/adapters/db"
 	"github.com/rtp-atw/nimble-interview/internal/scraper"
 	"github.com/rtp-atw/nimble-interview/pkg/reports/daos"
+	"github.com/rtp-atw/nimble-interview/pkg/reports/models"
 	"github.com/rtp-atw/nimble-interview/tools/logging"
 	"github.com/sirupsen/logrus"
 )
@@ -16,7 +17,7 @@ type Service struct {
 
 type ServiceInterface interface {
 	// Service
-	CreateReport(userUUID string, reportUUID uuid.UUID, keywordUUID string, keyword string) error
+	CreateReport(userUUID string, reportUUID uuid.UUID, keywordUUID string, keyword string) (models.Report, error)
 	UpdateReportResult(reportUUID string, extractData scraper.ExtractData) error
 }
 

@@ -16,7 +16,7 @@ export type UploadKeywordRequest = {
 export const useUploadKeywords = () => {
   const { fetcher } = useAuthMutation();
 
-  const { trigger, isMutating, error } = useSWRMutation<
+  const { trigger, isMutating, error, data } = useSWRMutation<
     UploadResponse,
     AxiosError,
     Key,
@@ -29,5 +29,6 @@ export const useUploadKeywords = () => {
     handleUpload: trigger,
     loading: isMutating,
     error,
+    data,
   };
 };

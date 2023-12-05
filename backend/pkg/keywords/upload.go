@@ -15,6 +15,7 @@ import (
 	"github.com/rtp-atw/nimble-interview/pkg/keywords/daos"
 	"github.com/rtp-atw/nimble-interview/pkg/keywords/models"
 	"github.com/rtp-atw/nimble-interview/pkg/reports"
+	reportModel "github.com/rtp-atw/nimble-interview/pkg/reports/models"
 	"github.com/rtp-atw/nimble-interview/tools"
 )
 
@@ -22,6 +23,7 @@ func (s *Service) Upload(c *gin.Context) {
 	defer tools.GinRecovery(c)
 
 	file, err := c.FormFile("file")
+	tools.CheckError(err)
 
 	filePath := filepath.Join("assets/tmp", file.Filename)
 
@@ -70,19 +72,21 @@ func (s *Service) Upload(c *gin.Context) {
 	mqService := rabbitmq.Initial()
 	defer mqService.Conn.Close()
 
+	generatedReport := []reportModel.Report{}
+
 	end := 5
 	for i := 0; i < len(keywordUUIDs); i++ {
 		if end > len(keywordUUIDs)-1 {
 			end = len(keywordUUIDs)
 		}
 		reqKeywords := keywordUUIDs[i:end]
-		fmt.Println(reqKeywords)
+
 		for _, req := range reqKeywords {
 			keyUUID := req[0]
 			key := req[1]
 			reportUUID := uuid.New()
 
-			err := reportService.CreateReport(user.UUID.String(), reportUUID, keyUUID, key)
+			report, err := reportService.CreateReport(user.UUID.String(), reportUUID, keyUUID, key)
 			if err != nil {
 				continue
 			}
@@ -92,11 +96,12 @@ func (s *Service) Upload(c *gin.Context) {
 				"keyword":   req,
 				"user_uuid": user.UUID.String(),
 			})
+			generatedReport = append(generatedReport, report)
 		}
 		i = end - 1
 		end += 5
 		time.Sleep(250 * time.Microsecond)
 	}
 
-	c.JSON(http.StatusOK, &gin.H{})
+	c.JSON(http.StatusOK, generatedReport)
 }

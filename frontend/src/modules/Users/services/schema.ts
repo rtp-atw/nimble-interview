@@ -1,4 +1,4 @@
-import { object, string, ref, type InferType, boolean } from "yup";
+import { object, string, ref, mixed, type InferType } from "yup";
 
 import { emailValidator, passwordValidator } from "@/src/validators";
 
@@ -22,5 +22,10 @@ export const signUpSchema = object({
     .required("Please cofirm your password"),
 });
 
+export const uploadSchema = object({
+  keywords: mixed().required("A File is required"),
+});
+
 export type SignInFormValue = InferType<typeof signInSchema>;
 export type SignUpFormValue = InferType<typeof signUpSchema>;
+export type UploadFormValue = InferType<typeof uploadSchema>;
