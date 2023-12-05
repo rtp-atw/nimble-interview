@@ -1,0 +1,1 @@
+ALTER TABLE reports ADD "is_extracted" BOOLEAN DEFAULT FALSE;
