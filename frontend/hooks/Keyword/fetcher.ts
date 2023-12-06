@@ -1,7 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 
 import { BACKEND_HOST } from "@/utils/variables";
-import { useProfile } from "..";
 
 export const useAuthMutation = () => {
   return {
@@ -63,8 +62,6 @@ export const authQueryWithJWT = async <T>(
   url: string,
   arg: Record<string, any>
 ): Promise<T> => {
-  console.log("arg", arg);
-
   return await axios<
     T,
     AxiosResponse<T, Record<string, any>>,
