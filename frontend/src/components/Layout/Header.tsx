@@ -1,13 +1,23 @@
-import { FC } from "react";
-import { Container } from "@components/Container";
-import clsx from "clsx";
+import { FC, useEffect, useState } from "react";
 import Link from "next/link";
-import { useProfile } from "@/hooks";
+import clsx from "clsx";
+
+import { useContext } from "react";
+
+import { AuthenticationContext } from "@/src/contexts/Authentication";
+
+import { Container } from "@components/Container";
 
 export const Header: FC = () => {
-  const { mounted, userJWT, handleLogout } = useProfile();
+  const ctx = useContext(AuthenticationContext);
+  const [mounted, setMounted] = useState<boolean>(false);
 
-  const isAuthenticated = mounted && !!userJWT;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isAuthenticated = mounted && !!ctx.jwt;
+
   return (
     <>
       <header className="bg-gray-25 border-b shadow-8 ">
@@ -60,7 +70,7 @@ export const Header: FC = () => {
             )}
             {isAuthenticated && (
               <span
-                onClick={handleLogout}
+                onClick={ctx.onLogout}
                 className={clsx(
                   "cursor-pointer",
                   "font-semibold hover:text-blue-500"

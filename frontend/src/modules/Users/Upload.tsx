@@ -8,10 +8,11 @@ import {
 } from "react";
 import clsx from "clsx";
 
-import { useProfile, useRequireAuth } from "@/hooks";
+import { useContext } from "react";
 import { useUploadKeywords } from "@/hooks/Keyword";
-
 import { useFormik } from "formik";
+
+import { AuthenticationContext } from "@/src/contexts/Authentication";
 
 import { Input } from "@components/Inputs";
 import { Button } from "@/src/components/Button";
@@ -21,9 +22,7 @@ import { KeywordTable } from "@/src/components/Table";
 import { Report } from "@/hooks/Keyword/types";
 
 export const Upload: FC = () => {
-  useRequireAuth();
-
-  const { userJWT } = useProfile();
+  const ctx = useContext(AuthenticationContext);
 
   const [inputKey, setInputKey] = useState(Date.now());
   const [reports, setReports] = useState<Report[]>([]);
@@ -38,7 +37,7 @@ export const Upload: FC = () => {
     if (!values.keywords) return;
     hookHandleUpload({
       file: values.keywords,
-      jwt: userJWT,
+      jwt: ctx.jwt,
     });
   };
 

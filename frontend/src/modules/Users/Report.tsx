@@ -4,7 +4,6 @@ import clsx from "clsx";
 import parse from "html-react-parser";
 import { debounce } from "lodash";
 
-import { useRequireAuth } from "@/hooks";
 import { useGetReport } from "@/hooks/Keyword";
 
 import { Report as ReportType } from "@/hooks/Keyword/types";
@@ -14,8 +13,6 @@ type ReportProps = {
   id: string;
 };
 export const Report: FC<ReportProps> = ({ id }) => {
-  useRequireAuth();
-
   const { data, mutate, loading } = useGetReport(id);
 
   const [report, setReport] = useState<ReportType>();
@@ -114,9 +111,6 @@ export const Report: FC<ReportProps> = ({ id }) => {
                   className={clsx("relative overflow-auto", "max-h-[480px]")}
                 >
                   {parse(report.html)}
-                  {/* <pre>
-                    <code>{report.html}</code>
-                  </pre> */}
                 </div>
               </div>
             </div>
