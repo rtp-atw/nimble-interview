@@ -29,9 +29,16 @@ func (s *Service) Upload(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, &gin.H{
 			"message": "file format isn't correct",
 		})
+		return
 	}
 
 	filePath := filepath.Join("assets/tmp", file.Filename)
+	defer func() {
+		err := os.Remove(filePath)
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	c.SaveUploadedFile(file, filePath)
 
@@ -43,15 +50,22 @@ func (s *Service) Upload(c *gin.Context) {
 	reader := csv.NewReader(fileTmp)
 
 	rawRecords, _ := reader.ReadAll()
+
 	keyword := models.ExtractedKeywords{}
 
 	keyword.Dehydrate(rawRecords)
+
+	if len(keyword.Data) > 100 {
+		c.JSON(http.StatusBadRequest, &gin.H{
+			"message": "more than 100 keywords",
+		})
+		return
+	}
 
 	user := jwt.GetClaim(c)
 
 	keywordUUIDs := [][]string{}
 
-	// NEED TO REFACTOR
 	for _, k := range keyword.Data {
 
 		keywordUUID := uuid.New()
@@ -72,8 +86,10 @@ func (s *Service) Upload(c *gin.Context) {
 		keywordUUIDs = append(keywordUUIDs, []string{daoUserKeyword.KeywordUUID, daoUserKeyword.Keyword})
 
 	}
+
 	reportService := reports.Register()
 	mqService := rabbitmq.Initial()
+
 	defer mqService.Conn.Close()
 
 	generatedReport := []reportModel.Report{}
