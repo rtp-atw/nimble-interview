@@ -1,6 +1,7 @@
 import { type FC, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import clsx from "clsx";
+import parse from "html-react-parser";
 import { debounce } from "lodash";
 
 import { useRequireAuth } from "@/hooks";
@@ -89,17 +90,17 @@ export const Report: FC<ReportProps> = ({ id }) => {
 
               <div className={clsx("col-span-1")}>
                 <p className={clsx("block", "text-lg font-semibold")}>Ads:</p>
-                <div>{report.ads}</div>
+                <div>{report.ads.toLocaleString()}</div>
               </div>
               <div className={clsx("col-span-1")}>
                 <p className={clsx("block", "text-lg font-semibold")}>Links:</p>
-                <div>{report.links}</div>
+                <div>{report.links.toLocaleString()}</div>
               </div>
               <div className={clsx("col-span-1")}>
                 <p className={clsx("block", "text-lg font-semibold")}>
                   Total Result:
                 </p>
-                <div>{report.total_result}</div>
+                <div>{report.total_result.toLocaleString()}</div>
               </div>
               <div className={clsx("col-span-1")}>
                 <p className={clsx("block", "text-lg font-semibold")}>
@@ -112,9 +113,10 @@ export const Report: FC<ReportProps> = ({ id }) => {
                 <div
                   className={clsx("relative overflow-auto", "max-h-[480px]")}
                 >
-                  <pre>
+                  {parse(report.html)}
+                  {/* <pre>
                     <code>{report.html}</code>
-                  </pre>
+                  </pre> */}
                 </div>
               </div>
             </div>
