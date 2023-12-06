@@ -1,18 +1,19 @@
 import useSWR from "swr";
+import { useContext } from "react";
+
+import { AuthenticationContext } from "@/src/contexts/Authentication";
+
 import type { Key } from "swr";
-
 import type { AxiosError } from "axios";
-
 import type { Report } from "./types";
 
 import { useAuthQuery } from "./fetcher";
-import { useProfile } from "..";
 
 export const useGetReport = (id: string) => {
-  const { userJWT } = useProfile();
+  const ctx = useContext(AuthenticationContext);
 
   const { fetcher } = useAuthQuery({
-    jwt: userJWT,
+    jwt: ctx.jwt,
   });
 
   const { isLoading, isValidating, error, data, mutate } = useSWR<

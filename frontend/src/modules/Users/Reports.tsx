@@ -1,15 +1,12 @@
 import { type FC, useState, useEffect } from "react";
 import clsx from "clsx";
 
-import { useRequireAuth } from "@/hooks";
 import { useGetReports } from "@/hooks/Keyword";
 
 import { KeywordTable } from "@/src/components/Table";
 import { Report as ReportType } from "@/hooks/Keyword/types";
 
 export const Reports: FC = () => {
-  useRequireAuth();
-
   const { data, mutate, loading } = useGetReports();
 
   const [reports, setReports] = useState<ReportType[]>([]);
