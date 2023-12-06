@@ -1,5 +1,9 @@
 # README
 
+## Requirements
+
+- Install migrate [`cmd`](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate) from `brew install golang-migrate`.
+
 ## How to run
 
 - Using `docker-compose up --build`
