@@ -1,10 +1,13 @@
 # README
 
+## Requirements
+
+- Install migrate [`cmd`](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate) from `brew install golang-migrate`.
+
 ## Environments
 
 ```
 POSTGRESQL_URL='postgres://{username}:{password}@{host}:5432/{db_name}?sslmode=disable'
-
 POSTGRESQL_GORM_URL="host={host} user={username} password={password} dbname={db_name} port={port} sslmode=disable TimeZone=Asia/Bangkok"
 ```
 

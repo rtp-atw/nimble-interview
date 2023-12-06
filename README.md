@@ -1,5 +1,9 @@
 # README
 
+## Requirements
+
+- Install migrate [`cmd`](https://github.com/golang-migrate/migrate/tree/master/cmd/migrate) from `brew install golang-migrate`.
+
 ## How to run
 
 - Using `docker-compose up --build`
@@ -45,3 +49,18 @@ Set inside frontend folder
 1.  Validate authentication through the user profile API instead of relying on cookie checking.
 2.  Make the Antd table responsive.
 3.  Use streaming to fetch the latest results of reports instead of employing the polling method.
+
+## Released
+
+### 1.0.2 (06-12-2023)
+
+- ✏️ chore: update readme for release history
+- ✏️ chore: update readme for migration requirements
+
+### 1.0.1 (05-12-2023)
+
+- ♻️ refactor: add example env file
+
+### 1.0.0 (05-12-2023)
+
+- ✨feat: initial release first state
