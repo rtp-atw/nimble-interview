@@ -1,7 +1,3 @@
-// import getConfig from "next/config";
-
-// const { publicRuntimeConfig } = getConfig();
-
 let _COOKIE_HOST = "";
 let _BACKEND_HOST = "";
 
