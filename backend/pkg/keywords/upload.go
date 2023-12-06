@@ -35,13 +35,11 @@ func (s *Service) Upload(c *gin.Context) {
 	}
 
 	reader := csv.NewReader(fileTmp)
-	rawRecords, _ := reader.ReadAll()
 
+	rawRecords, _ := reader.ReadAll()
 	keyword := models.ExtractedKeywords{}
 
 	keyword.Dehydrate(rawRecords)
-
-	s.CreateKeyword(keyword.Data[0])
 
 	user := jwt.GetClaim(c)
 
