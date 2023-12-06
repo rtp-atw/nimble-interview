@@ -23,15 +23,15 @@ type ExtractedKeywords struct {
 }
 
 func (k *ExtractedKeywords) ValidateKeyword(key string) (string, bool) {
-	spacedStr := strings.ReplaceAll(key, " ", "")
-	commaStr := strings.ReplaceAll(spacedStr, ",", "")
-	if strings.Contains(commaStr, " ") {
+	unspaceStr := strings.ReplaceAll(key, " ", "")
+	uncommaStr := strings.ReplaceAll(unspaceStr, ",", "")
+	if strings.Contains(uncommaStr, " ") {
 		return "", false
 	}
-	if commaStr == "" {
+	if uncommaStr == "" {
 		return "", false
 	}
-	return commaStr, true
+	return uncommaStr, true
 }
 
 func (k *ExtractedKeywords) Dehydrate(records [][]string) {
