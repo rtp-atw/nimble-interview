@@ -11,7 +11,7 @@ import { AxiosError } from "axios";
 
 import { useRouter } from "next/router";
 import { useFormik, type FormikHelpers } from "formik";
-import { useProtectedAuth, useSignIn } from "@/hooks";
+import { useSignIn } from "@/hooks";
 
 import { Input } from "@components/Inputs";
 import { Button } from "@components/Button";
@@ -21,8 +21,6 @@ import {
 } from "@modules/Users/services/schema";
 
 export const SignIn: FC = () => {
-  useProtectedAuth();
-
   const router = useRouter();
 
   const { handleSignIn, loading: apiLoading } = useSignIn();

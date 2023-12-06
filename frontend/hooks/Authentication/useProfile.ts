@@ -49,27 +49,3 @@ export const useProfile = () => {
 
   return { profile, loading, mounted, userJWT, handleLogout };
 };
-
-export const useProtectedAuth = () => {
-  const { loading, userJWT } = useProfile();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (loading) return;
-    if (userJWT) {
-      router.push("/");
-    }
-  }, [loading, router, userJWT]);
-};
-
-export const useRequireAuth = () => {
-  const { loading, userJWT } = useProfile();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (loading) return;
-    if (!userJWT) {
-      router.push("/");
-    }
-  }, [loading, router, userJWT]);
-};

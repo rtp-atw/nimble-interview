@@ -8,7 +8,7 @@ import {
 } from "react";
 import clsx from "clsx";
 
-import { useProfile, useRequireAuth } from "@/hooks";
+import { useProfile } from "@/hooks";
 import { useUploadKeywords } from "@/hooks/Keyword";
 
 import { useFormik } from "formik";
@@ -21,8 +21,6 @@ import { KeywordTable } from "@/src/components/Table";
 import { Report } from "@/hooks/Keyword/types";
 
 export const Upload: FC = () => {
-  useRequireAuth();
-
   const { userJWT } = useProfile();
 
   const [inputKey, setInputKey] = useState(Date.now());
