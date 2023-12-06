@@ -24,7 +24,7 @@ func (s *ReportRepository) GetReports(userUUID string) (reports []Report, err er
 		Select("reports.*, keywords.keyword").
 		Where("reports.user_uuid = ? AND reports.is_deleted = FALSE", userUUID).
 		Joins("LEFT JOIN keywords ON keywords.uuid = reports.keyword_uuid").
-		Order(`reports.updated_at DESC, reports.is_extracted DESC, reports.id ASC`).
+		Order(`reports.is_extracted DESC, reports.updated_at DESC, reports.id ASC`).
 		Scan(&reports)
 
 	if tx.Error != nil {
