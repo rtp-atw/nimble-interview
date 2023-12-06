@@ -114,9 +114,6 @@ export const Report: FC<ReportProps> = ({ id }) => {
                   className={clsx("relative overflow-auto", "max-h-[480px]")}
                 >
                   {parse(report.html)}
-                  {/* <pre>
-                    <code>{report.html}</code>
-                  </pre> */}
                 </div>
               </div>
             </div>
