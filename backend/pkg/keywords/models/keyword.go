@@ -22,6 +22,17 @@ type ExtractedKeywords struct {
 	Data []string
 }
 
+func (k *ExtractedKeywords) ValidateKeyword(key string) (string, bool) {
+	formattedStr := strings.ReplaceAll(key, " ", "")
+	if strings.Contains(formattedStr, " ") {
+		return "", false
+	}
+	if formattedStr == "" {
+		return "", false
+	}
+	return formattedStr, true
+}
+
 func (k *ExtractedKeywords) Dehydrate(records [][]string) {
 	processChan := make(chan []string, len(records))
 
@@ -31,14 +42,23 @@ func (k *ExtractedKeywords) Dehydrate(records [][]string) {
 		defer wg.Done()
 
 		filteredData := []string{}
-		for _, d := range data {
-			// Filter unexpected value
 
-			formattedStr := strings.ReplaceAll(d, " ", "")
-			if strings.Contains(formattedStr, " ") {
+		for _, d := range data {
+
+			words := strings.Fields(d)
+			if len(words) > 0 {
+				for _, w := range words {
+					formattedStr, isValid := k.ValidateKeyword(w)
+					if !isValid {
+						continue
+					}
+					filteredData = append(filteredData, formattedStr)
+				}
 				continue
 			}
-			if formattedStr == "" {
+
+			formattedStr, isValid := k.ValidateKeyword(d)
+			if !isValid {
 				continue
 			}
 
@@ -49,6 +69,7 @@ func (k *ExtractedKeywords) Dehydrate(records [][]string) {
 	}
 
 	for _, r := range records {
+
 		wg.Add(1)
 		go decouplingFunc(r, processChan, &wg)
 	}
