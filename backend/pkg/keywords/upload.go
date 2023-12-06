@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -25,7 +24,21 @@ func (s *Service) Upload(c *gin.Context) {
 	file, err := c.FormFile("file")
 	tools.CheckError(err)
 
+	contentType := file.Header.Get("Content-Type")
+	if contentType != "text/csv" {
+		c.JSON(http.StatusBadRequest, &gin.H{
+			"message": "file format isn't correct",
+		})
+		return
+	}
+
 	filePath := filepath.Join("assets/tmp", file.Filename)
+	defer func() {
+		err := os.Remove(filePath)
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	c.SaveUploadedFile(file, filePath)
 
@@ -37,15 +50,22 @@ func (s *Service) Upload(c *gin.Context) {
 	reader := csv.NewReader(fileTmp)
 
 	rawRecords, _ := reader.ReadAll()
+
 	keyword := models.ExtractedKeywords{}
 
 	keyword.Dehydrate(rawRecords)
+
+	if len(keyword.Data) > 100 {
+		c.JSON(http.StatusBadRequest, &gin.H{
+			"message": "more than 100 keywords",
+		})
+		return
+	}
 
 	user := jwt.GetClaim(c)
 
 	keywordUUIDs := [][]string{}
 
-	// NEED TO REFACTOR
 	for _, k := range keyword.Data {
 
 		keywordUUID := uuid.New()
@@ -66,39 +86,30 @@ func (s *Service) Upload(c *gin.Context) {
 		keywordUUIDs = append(keywordUUIDs, []string{daoUserKeyword.KeywordUUID, daoUserKeyword.Keyword})
 
 	}
+
 	reportService := reports.Register()
 	mqService := rabbitmq.Initial()
+
 	defer mqService.Conn.Close()
 
 	generatedReport := []reportModel.Report{}
 
-	end := 5
-	for i := 0; i < len(keywordUUIDs); i++ {
-		if end > len(keywordUUIDs)-1 {
-			end = len(keywordUUIDs)
+	for _, req := range keywordUUIDs {
+		reportUUID := uuid.New()
+		keyUUID := req[0]
+		key := req[1]
+
+		report, err := reportService.CreateReport(user.UUID.String(), reportUUID, keyUUID, key)
+		if err != nil {
+			continue
 		}
-		reqKeywords := keywordUUIDs[i:end]
 
-		for _, req := range reqKeywords {
-			keyUUID := req[0]
-			key := req[1]
-			reportUUID := uuid.New()
-
-			report, err := reportService.CreateReport(user.UUID.String(), reportUUID, keyUUID, key)
-			if err != nil {
-				continue
-			}
-
-			mqService.SendQueue("REPORT:GENERATE", map[string]interface{}{
-				"uuid":      reportUUID,
-				"keyword":   req,
-				"user_uuid": user.UUID.String(),
-			})
-			generatedReport = append(generatedReport, report)
-		}
-		i = end - 1
-		end += 5
-		time.Sleep(250 * time.Microsecond)
+		mqService.SendQueue("REPORT:GENERATE", map[string]interface{}{
+			"uuid":      reportUUID,
+			"keyword":   req,
+			"user_uuid": user.UUID.String(),
+		})
+		generatedReport = append(generatedReport, report)
 	}
 
 	c.JSON(http.StatusOK, generatedReport)
