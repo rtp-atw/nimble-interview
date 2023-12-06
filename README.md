@@ -52,6 +52,18 @@ Set inside frontend folder
 
 ## Released
 
+### 1.0.3 (06-12-2023)
+
+- Using middleware to check user authorization
+- Using react context to control authentication in layout level
+- Add html parser package
+- implement html parser in report page
+- Change number format in report page
+- Validate keyword more than 100 keywords
+- Delete file after finished process
+- Fix dehydrate func to support multiple CSV format
+- Write test case for testing CSV format
+
 ### 1.0.2 (06-12-2023)
 
 - ✏️ chore: update readme for release history
