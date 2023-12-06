@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -24,6 +23,13 @@ func (s *Service) Upload(c *gin.Context) {
 
 	file, err := c.FormFile("file")
 	tools.CheckError(err)
+
+	contentType := file.Header.Get("Content-Type")
+	if contentType != "text/csv" {
+		c.JSON(http.StatusBadRequest, &gin.H{
+			"message": "file format isn't correct",
+		})
+	}
 
 	filePath := filepath.Join("assets/tmp", file.Filename)
 
@@ -72,33 +78,22 @@ func (s *Service) Upload(c *gin.Context) {
 
 	generatedReport := []reportModel.Report{}
 
-	end := 5
-	for i := 0; i < len(keywordUUIDs); i++ {
-		if end > len(keywordUUIDs)-1 {
-			end = len(keywordUUIDs)
+	for _, req := range keywordUUIDs {
+		reportUUID := uuid.New()
+		keyUUID := req[0]
+		key := req[1]
+
+		report, err := reportService.CreateReport(user.UUID.String(), reportUUID, keyUUID, key)
+		if err != nil {
+			continue
 		}
-		reqKeywords := keywordUUIDs[i:end]
 
-		for _, req := range reqKeywords {
-			keyUUID := req[0]
-			key := req[1]
-			reportUUID := uuid.New()
-
-			report, err := reportService.CreateReport(user.UUID.String(), reportUUID, keyUUID, key)
-			if err != nil {
-				continue
-			}
-
-			mqService.SendQueue("REPORT:GENERATE", map[string]interface{}{
-				"uuid":      reportUUID,
-				"keyword":   req,
-				"user_uuid": user.UUID.String(),
-			})
-			generatedReport = append(generatedReport, report)
-		}
-		i = end - 1
-		end += 5
-		time.Sleep(250 * time.Microsecond)
+		mqService.SendQueue("REPORT:GENERATE", map[string]interface{}{
+			"uuid":      reportUUID,
+			"keyword":   req,
+			"user_uuid": user.UUID.String(),
+		})
+		generatedReport = append(generatedReport, report)
 	}
 
 	c.JSON(http.StatusOK, generatedReport)
